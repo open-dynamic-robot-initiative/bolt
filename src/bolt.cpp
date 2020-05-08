@@ -106,7 +106,7 @@ void Bolt::initialize(const std::string& network_id)
     reverse_polarities_ = {false,
                            true,
                            true,
-                           true,
+                           false,
                            false,
                            false};
     joints_.set_joint_polarities(reverse_polarities_);

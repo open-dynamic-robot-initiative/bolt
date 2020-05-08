@@ -19,30 +19,27 @@ macro(create_demo demo_name)
   # Did we get any optional args?
   list(LENGTH extra_macro_args num_extra_args)
   if (${num_extra_args} GREATER 0)
-      list(GET extra_macro_args 0 robot_name)
+      list(GET extra_macro_args 0 config_file)
   endif ()
-  if (${num_extra_args} GREATER 1)
-      list(GET extra_macro_args 1 config_file)
-  endif ()
-
-  add_executable(demo_${demo_name}
-    demo_${demo_name}.cpp
-    common_demo_header.hpp
+  
+  # Add the executable of the demo.
+  add_executable(${demo_name}
+    ${demo_name}.cpp
   )
-
-  target_link_libraries(demo_${demo_name}
-    ${robot_name}
+  
+  # Add the dependencies.
+  target_link_libraries(${demo_name}
     ${PROJECT_NAME}
     ${catkin_LIBRARIES}
     ${YAML_CPP_LIBRARIES}
   )
 
-  # first look if a robot_properties_${robot_name} package contain a config file.
+  # Check if the file exists.
   if(config_file)
     if(NOT EXISTS ${config_file})
-      message(FATAL_ERROR "demo_${demo_name}: Error cannot find ${config_file}")
+      message(FATAL_ERROR "${demo_name}: Error cannot find ${config_file}")
     endif()
-    target_compile_definitions(demo_${demo_name} PUBLIC
+    target_compile_definitions(${demo_name} PUBLIC
       YAML_PARAMS="${config_file}")
   endif()
 
@@ -52,4 +49,6 @@ endmacro(create_demo demo_name)
 # build demos #
 ###############
 
-create_demo(bolt bolt)
+create_demo(demo_bolt)
+create_demo(demo_bolt_calibration
+    "${robot_properties_bolt_SOURCE_PREFIX}/config/dgm_parameters_bolt.yaml")

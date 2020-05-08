@@ -1,4 +1,4 @@
-# bolt {#mainpage}
+# bolt
 
 ## What it is
 

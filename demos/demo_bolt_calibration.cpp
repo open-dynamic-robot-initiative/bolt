@@ -11,11 +11,10 @@
 
 
 #include "bolt/bolt.hpp"
-#include "common_demo_header.hpp"
+#include "bolt/common_demo_header.hpp"
 
-using namespace blmc_robots;
 using namespace bolt;
-typedef ThreadCalibrationData<Solo12> ThreadCalibrationData_t;
+typedef ThreadCalibrationData<Bolt> ThreadCalibrationData_t;
 
 
 static THREAD_FUNCTION_RETURN_TYPE control_loop(void* thread_data_void_ptr)
@@ -26,22 +25,22 @@ static THREAD_FUNCTION_RETURN_TYPE control_loop(void* thread_data_void_ptr)
       thread_data_ptr->joint_index_to_zero;
     thread_data_ptr->robot->calibrate(joint_index_to_zero);
 
-    CTRL_C_DETECTED = true;
+    blmc_robots::CTRL_C_DETECTED = true;
     return THREAD_FUNCTION_RETURN_VALUE;
 }  // end control_loop
 
 
 int main(int argc, char** argv)
 {
-    enable_ctrl_c();
+    blmc_robots::enable_ctrl_c();
 
     if(argc != 2)
     {
         throw std::runtime_error("Wrong number of argument: `./demo_solo12_calibration network_id`.");
     }
     
-    std::shared_ptr<Solo12> robot = std::make_shared<Solo12>();
-    robot->initialize(argv[1], "banana");
+    std::shared_ptr<Bolt> robot = std::make_shared<Bolt>();
+    robot->initialize(argv[1]);
 
     ThreadCalibrationData_t thread_data(robot);
 

@@ -9,8 +9,9 @@
 #pragma once
 
 #include <blmc_drivers/devices/spi_motor_board.hpp>
-#include "blmc_robots/common_header.hpp"
+
 #include "blmc_robots/blmc_joint_module.hpp"
+#include "blmc_robots/common_header.hpp"
 
 namespace bolt
 {
@@ -21,9 +22,9 @@ typedef Eigen::Matrix<double, 6, 1> Vector6d;
 
 /**
  * @brief Driver for the Bolt biped robot.
- * 
+ *
  * Map of the joints:
- * 
+ *
  * +----------|------------|---------|------------|-------------+
  * + joint_id | joint_name | udriver | motor_port | motor_index +
  * +==========|============|=========|============|=============+
@@ -57,7 +58,10 @@ public:
     /**
      * @brief Sets the maximum joint torques.
      */
-    void set_max_joint_torques(const double& max_joint_torques);
+    void set_max_joint_torques(const double& max_joint_torques)
+    {
+        max_joint_torques_.fill(max_joint_torques);
+    }
 
     /**
      * @brief send_target_torques sends the target currents to the motors
@@ -239,9 +243,10 @@ public:
     {
         for (const auto& error_code : motor_board_errors_)
         {
-        if (error_code != 0) {
-            return true;
-        }
+            if (error_code != 0)
+            {
+                return true;
+            }
         }
         return false;
     }
@@ -250,16 +255,16 @@ private:
     /**
      * Joint properties
      */
-    Vector6d motor_inertias_; /**! motors inertia. */
+    Vector6d motor_inertias_;         /**! motors inertia. */
     Vector6d motor_torque_constants_; /**! DCM motor torque constants. */
-    Vector6d joint_gear_ratios_; /**! joint gear ratios (9). */
-    Vector6d motor_max_current_; /**! Max appliable current before the robot
-                                      shutdown. */
+    Vector6d joint_gear_ratios_;      /**! joint gear ratios (9). */
+    Vector6d motor_max_current_;    /**! Max appliable current before the robot
+                                         shutdown. */
     Vector6d joint_zero_positions_; /**! Offset to the theoretical "0" pose. */
     /** @brief Max joint torques (Nm) */
     Eigen::Array<double, 6, 1> max_joint_torques_;
     /** @brief Security margin on the saturation of the control. */
-    static const double  max_joint_torque_security_margin_;
+    static const double max_joint_torque_security_margin_;
 
     /**
      * Hardware status
@@ -323,7 +328,8 @@ private:
     /** @brief Map the joint id to the motor port id, @see Bolt description. */
     std::array<int, 6> map_joint_id_to_motor_port_id_;
 
-    /** @brief This is the name of the network: Left column in ifconfig output */
+    /** @brief This is the name of the network: Left column in ifconfig output
+     */
     std::string network_id_;
 
     /**
@@ -344,8 +350,8 @@ private:
      */
     std::shared_ptr<blmc_drivers::SpiBus> spi_bus_;
 
-    /** @brief These are the 6 motor boards of the robot. */
-    std::array<std::shared_ptr<blmc_drivers::SpiMotorBoard>, 6> motor_boards_;
+    /** @brief These are the 3 motor boards of the robot. */
+    std::array<std::shared_ptr<blmc_drivers::SpiMotorBoard>, 3> motor_boards_;
 
     /** @brief motors_ are the objects allowing us to send motor commands and
      * receive data. */
@@ -356,7 +362,6 @@ private:
 
     /** @brief Address the rotation direction of the motor. */
     std::array<bool, 6> reverse_polarities_;
-
 };
 
 }  // namespace bolt
