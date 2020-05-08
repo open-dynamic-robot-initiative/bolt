@@ -15,10 +15,14 @@
 
 namespace bolt
 {
+
+#define BOLT_NB_MOTOR_BOARD 3
+#define BOLT_NB_MOTOR 6
+
 /**
- * @brief Vector6d shortcut for the eigen vector of size 6.
+ * @brief Vector6d shortcut for the eigen vector of size BOLT_NB_MOTOR.
  */
-typedef Eigen::Matrix<double, 6, 1> Vector6d;
+typedef Eigen::Matrix<double, BOLT_NB_MOTOR, 1> Vector6d;
 
 /**
  * @brief Driver for the Bolt biped robot.
@@ -200,7 +204,7 @@ public:
      * @return This gives the status (enabled/disabled) of each motors using the
      * joint ordering convention.
      */
-    const std::array<bool, 6>& get_motor_enabled()
+    const std::array<bool, BOLT_NB_MOTOR>& get_motor_enabled()
     {
         return motor_enabled_;
     }
@@ -210,7 +214,7 @@ public:
      * @return This gives the status (enabled/disabled) of each motors using the
      * joint ordering convention.
      */
-    const std::array<bool, 6>& get_motor_ready()
+    const std::array<bool, BOLT_NB_MOTOR>& get_motor_ready()
     {
         return motor_ready_;
     }
@@ -220,7 +224,7 @@ public:
      * @return This gives the status (enabled/disabled of the onboard control
      * cards).
      */
-    const std::array<bool, 4>& get_motor_board_enabled()
+    const std::array<bool, BOLT_NB_MOTOR_BOARD>& get_motor_board_enabled()
     {
         return motor_board_enabled_;
     }
@@ -230,7 +234,7 @@ public:
      * @return This gives the status (enabled/disabled of the onboard control
      * cards).
      */
-    const std::array<int, 4>& get_motor_board_errors()
+    const std::array<int, BOLT_NB_MOTOR_BOARD>& get_motor_board_errors()
     {
         return motor_board_errors_;
     }
@@ -262,7 +266,7 @@ private:
                                          shutdown. */
     Vector6d joint_zero_positions_; /**! Offset to the theoretical "0" pose. */
     /** @brief Max joint torques (Nm) */
-    Eigen::Array<double, 6, 1> max_joint_torques_;
+    Eigen::Array<double, BOLT_NB_MOTOR, 1> max_joint_torques_;
     /** @brief Security margin on the saturation of the control. */
     static const double max_joint_torque_security_margin_;
 
@@ -273,25 +277,25 @@ private:
      * @brief This gives the status (enabled/disabled) of each motors using the
      * joint ordering convention.
      */
-    std::array<bool, 6> motor_enabled_;
+    std::array<bool, BOLT_NB_MOTOR> motor_enabled_;
 
     /**
      * @brief This gives the status (enabled/disabled) of each motors using the
      * joint ordering convention.
      */
-    std::array<bool, 6> motor_ready_;
+    std::array<bool, BOLT_NB_MOTOR> motor_ready_;
 
     /**
      * @brief This gives the status (enabled/disabled of the onboard control
      * cards).
      */
-    std::array<bool, 4> motor_board_enabled_;
+    std::array<bool, BOLT_NB_MOTOR_BOARD> motor_board_enabled_;
 
     /**
      * @brief This gives the status (enabled/disabled of the onboard control
      * cards).
      */
-    std::array<int, 4> motor_board_errors_;
+    std::array<int, BOLT_NB_MOTOR_BOARD> motor_board_errors_;
 
     /**
      * Joint data
@@ -323,10 +327,10 @@ private:
      */
 
     /** @brief Map the joint id to the motor board id, @see Bolt description. */
-    std::array<int, 6> map_joint_id_to_motor_board_id_;
+    std::array<int, BOLT_NB_MOTOR> map_joint_id_to_motor_board_id_;
 
     /** @brief Map the joint id to the motor port id, @see Bolt description. */
-    std::array<int, 6> map_joint_id_to_motor_port_id_;
+    std::array<int, BOLT_NB_MOTOR> map_joint_id_to_motor_port_id_;
 
     /** @brief This is the name of the network: Left column in ifconfig output
      */
@@ -350,18 +354,18 @@ private:
      */
     std::shared_ptr<blmc_drivers::SpiBus> spi_bus_;
 
-    /** @brief These are the 3 motor boards of the robot. */
-    std::array<std::shared_ptr<blmc_drivers::SpiMotorBoard>, 3> motor_boards_;
+    /** @brief These are the BOLT_NB_MOTOR_BOARD motor boards of the robot. */
+    std::array<std::shared_ptr<blmc_drivers::SpiMotorBoard>, BOLT_NB_MOTOR_BOARD> motor_boards_;
 
     /** @brief motors_ are the objects allowing us to send motor commands and
      * receive data. */
-    std::array<blmc_robots::MotorInterface_ptr, 6> motors_;
+    std::array<blmc_robots::MotorInterface_ptr, BOLT_NB_MOTOR> motors_;
 
     /** @brief Joint modules containing the driving system paramters */
-    blmc_robots::BlmcJointModules<6> joints_;
+    blmc_robots::BlmcJointModules<BOLT_NB_MOTOR> joints_;
 
     /** @brief Address the rotation direction of the motor. */
-    std::array<bool, 6> reverse_polarities_;
+    std::array<bool, BOLT_NB_MOTOR> reverse_polarities_;
 };
 
 }  // namespace bolt
