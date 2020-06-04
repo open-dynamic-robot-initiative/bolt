@@ -8,16 +8,16 @@
  */
 #pragma once
 
-#include <blmc_drivers/devices/spi_motor_board.hpp>
-
+#include "blmc_drivers/devices/spi_motor_board.hpp"
+#include "blmc_drivers/serial_reader.hpp"
 #include "blmc_robots/blmc_joint_module.hpp"
 #include "blmc_robots/common_header.hpp"
 
 namespace bolt
 {
-
 #define BOLT_NB_MOTOR_BOARD 3
 #define BOLT_NB_MOTOR 6
+#define BOLT_NB_SLIDER 4
 
 /**
  * @brief Vector6d shortcut for the eigen vector of size BOLT_NB_MOTOR.
@@ -255,6 +255,32 @@ public:
         return false;
     }
 
+    /**
+     * Additional data
+     */
+
+    /**
+     * @brief Get the slider positions in [0, 1]
+     *
+     * @return Eigen::Ref<Eigen::Matrix<double, BOLT_NB_SLIDER, 1> >
+     */
+    const Eigen::Ref<Eigen::Matrix<double, BOLT_NB_SLIDER, 1> >
+    get_slider_positions()
+    {
+        return slider_positions_;
+    }
+
+    /**
+     * @brief Get the active estop value
+     *
+     * @return true if the button is pressed.
+     * @return false otherwize.
+     */
+    bool get_active_estop() const
+    {
+        return active_estop_;
+    }
+
 private:
     /**
      * Joint properties
@@ -301,25 +327,19 @@ private:
      * Joint data
      */
 
-    /**
-     * @brief joint_positions_
-     */
+    /** @brief Joint positions. */
     Vector6d joint_positions_;
-    /**
-     * @brief joint_velocities_
-     */
+
+    /** @brief Joint velocities. */
     Vector6d joint_velocities_;
-    /**
-     * @brief joint_torques_
-     */
+
+    /** @brief Joint torques. */
     Vector6d joint_torques_;
-    /**
-     * @brief joint_target_torques_
-     */
+
+    /** @brief Target joint torques, reference from the controller. */
     Vector6d joint_target_torques_;
-    /**
-     * @brief joint_encoder_index_
-     */
+
+    /** @brief Joint encoder index. */
     Vector6d joint_encoder_index_;
 
     /**
@@ -332,9 +352,20 @@ private:
     /** @brief Map the joint id to the motor port id, @see Bolt description. */
     std::array<int, BOLT_NB_MOTOR> map_joint_id_to_motor_port_id_;
 
-    /** @brief This is the name of the network: Left column in ifconfig output
-     */
+    /** @brief Name of the network lan: Left column in ifconfig output. */
     std::string network_id_;
+
+    /** @brief Slider position in [0, 1]. */
+    Eigen::Matrix<double, BOLT_NB_SLIDER, 1> slider_positions_;
+
+    /** @brief E-stop from the slider box. */
+    bool active_estop_;
+
+    /** @brief Integers from the serial port.
+     * - 4 sliders in [0, 1024]
+     * - emergency stop
+     */
+    std::vector<int> slider_box_data_;
 
     /**
      * Drivers communication objects
@@ -355,7 +386,9 @@ private:
     std::shared_ptr<blmc_drivers::SpiBus> spi_bus_;
 
     /** @brief These are the BOLT_NB_MOTOR_BOARD motor boards of the robot. */
-    std::array<std::shared_ptr<blmc_drivers::SpiMotorBoard>, BOLT_NB_MOTOR_BOARD> motor_boards_;
+    std::array<std::shared_ptr<blmc_drivers::SpiMotorBoard>,
+               BOLT_NB_MOTOR_BOARD>
+        motor_boards_;
 
     /** @brief motors_ are the objects allowing us to send motor commands and
      * receive data. */
@@ -366,6 +399,11 @@ private:
 
     /** @brief Address the rotation direction of the motor. */
     std::array<bool, BOLT_NB_MOTOR> reverse_polarities_;
+
+    /**
+     * @brief Reader for serial port to read arduino slider values.
+     */
+    std::shared_ptr<blmc_drivers::SerialReader> serial_reader_;
 };
 
 }  // namespace bolt
