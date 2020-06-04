@@ -155,7 +155,7 @@ void Bolt::acquire_sensors()
     for (unsigned i = 0; i < slider_positions_.size(); ++i)
     {
         // acquire the slider
-        slider_positions_(i) = double(slider_box_data_[i+1]) / 1024.;
+        slider_positions_(i) = double(slider_box_data_[i + 1]) / 1024.;
     }
     // acquire the e-stop from the slider box
     active_estop_ = slider_box_data_[0] == 0;

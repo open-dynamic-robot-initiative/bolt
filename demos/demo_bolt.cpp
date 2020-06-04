@@ -59,12 +59,17 @@ static THREAD_FUNCTION_RETURN_TYPE control_loop(void* args)
         {
             rt_printf("\33[H\33[2J");  // clear screen
             blmc_robots::print_vector("des joint_tau  : ", desired_torque);
-            blmc_robots::print_vector("des joint_pos  : ", desired_joint_position);
+            blmc_robots::print_vector("des joint_pos  : ",
+                                      desired_joint_position);
             rt_printf("\n");
-            blmc_robots::print_vector("act joint_pos  : ", robot.get_joint_positions());
-            blmc_robots::print_vector("act joint_vel  : ", robot.get_joint_velocities());
-            blmc_robots::print_vector("act slider pos : ", robot.get_slider_positions());
-            rt_printf("act e-stop     : %s\n", robot.get_active_estop() ? "true" : "false");
+            blmc_robots::print_vector("act joint_pos  : ",
+                                      robot.get_joint_positions());
+            blmc_robots::print_vector("act joint_vel  : ",
+                                      robot.get_joint_velocities());
+            blmc_robots::print_vector("act slider pos : ",
+                                      robot.get_slider_positions());
+            rt_printf("act e-stop     : %s\n",
+                      robot.get_active_estop() ? "true" : "false");
 
             fflush(stdout);
         }

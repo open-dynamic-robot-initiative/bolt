@@ -1,13 +1,15 @@
 /**
  * @file
  * @license BSD 3-clause
- * @copyright Copyright (c) 2020, New York University and Max Planck Gesellschaft
- * 
+ * @copyright Copyright (c) 2020, New York University and Max Planck
+ * Gesellschaft
+ *
  * @brief This program is used to perform the hardware calibration of the robot.
  * Procedure:
  *  - You must start the robot in a position that is close to the "zero" pose.
- *  - Then start the demo: roscd && sudo ./lib/bolt/hardware_calibration <network_id>
- *      The "network_id" is the left column of the output of `ifconfig` in bash.
+ *  - Then start the demo: roscd && sudo ./lib/bolt/hardware_calibration
+ * <network_id> The "network_id" is the left column of the output of `ifconfig`
+ * in bash.
  *  - The robot is going to find the closest index in a specific direction and
  *      go idle (0 torques sent).
  *  - In the terminal you have displayed the distance between the zero and the
