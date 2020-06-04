@@ -2,7 +2,6 @@
 
 #include "bolt/bolt.hpp"
 
-
 namespace bolt
 {
 const double Bolt::max_joint_torque_security_margin_ = 0.99;
@@ -46,7 +45,15 @@ Bolt::Bolt()
     /**
      * Additional data
      */
-    
+    map_joint_id_to_motor_board_id_.fill(0);
+    map_joint_id_to_motor_port_id_.fill(0);
+    network_id_ = "";
+    map_joint_id_to_motor_port_id_.fill(0);
+    slider_positions_.setZero();
+    // By default assume the estop is active.
+    active_estop_ = true;
+    // 4 sliders + 1 emergency stop button.
+    slider_box_data_.resize(BOLT_NB_SLIDER + 1, 0);
 
     /**
      * Setup some known data
@@ -57,7 +64,6 @@ Bolt::Bolt()
     motor_torque_constants_.fill(0.025);
     motor_inertias_.fill(0.045);
     joint_gear_ratios_.fill(9.0);
-
 }
 
 void Bolt::initialize(const std::string& network_id)
@@ -103,12 +109,7 @@ void Bolt::initialize(const std::string& network_id)
         max_joint_torque_security_margin_ * joints_.get_max_torques().array();
 
     // fix the polarity to be the same as the urdf model.
-    reverse_polarities_ = {false,
-                           true,
-                           true,
-                           false,
-                           false,
-                           false};
+    reverse_polarities_ = {false, true, true, false, false, false};
     joints_.set_joint_polarities(reverse_polarities_);
 
     // The the control gains in order to perform the calibration
@@ -116,6 +117,10 @@ void Bolt::initialize(const std::string& network_id)
     kp.fill(2.0);
     kd.fill(0.05);
     joints_.set_position_control_gains(kp, kd);
+
+    // Use a serial port to read slider values.
+    serial_reader_ = std::make_shared<blmc_drivers::SerialReader>(
+        "serial_port", BOLT_NB_SLIDER + 1);
 
     // Wait until all the motors are ready.
     spi_bus_->wait_until_ready();
@@ -144,7 +149,16 @@ void Bolt::acquire_sensors()
      * Additional data
      */
 
-    /** @todo For the robot Bolt add a potential serial Reader. */
+    // acquire the slider positions
+    /// @todo: Handle case that no new values are arriving.
+    serial_reader_->fill_vector(slider_box_data_);
+    for (unsigned i = 0; i < slider_positions_.size(); ++i)
+    {
+        // acquire the slider
+        slider_positions_(i) = double(slider_box_data_[i + 1]) / 1024.;
+    }
+    // acquire the e-stop from the slider box
+    active_estop_ = slider_box_data_[0] == 0;
 
     /**
      * The different status.
