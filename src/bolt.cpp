@@ -109,7 +109,7 @@ void Bolt::initialize(const std::string& network_id)
         max_joint_torque_security_margin_ * joints_.get_max_torques().array();
 
     // fix the polarity to be the same as the urdf model.
-    reverse_polarities_ = {false, true, true, false, false, false};
+    reverse_polarities_ = {true, true, true, true, false, false};
     joints_.set_joint_polarities(reverse_polarities_);
 
     // The the control gains in order to perform the calibration
