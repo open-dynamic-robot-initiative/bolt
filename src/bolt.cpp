@@ -54,6 +54,11 @@ Bolt::Bolt()
     active_estop_ = true;
     // 4 sliders + 1 emergency stop button.
     slider_box_data_.resize(BOLT_NB_SLIDER + 1, 0);
+    base_accelerometer_.setZero();
+    base_gyroscope_.setZero();
+    base_attitude_.setZero();
+    base_linear_acceleration_.setZero();
+    base_attitude_quaternion_.setZero();
 
     /**
      * Setup some known data
@@ -64,6 +69,7 @@ Bolt::Bolt()
     motor_torque_constants_.fill(0.025);
     motor_inertias_.fill(0.045);
     joint_gear_ratios_.fill(9.0);
+    first = true;
 }
 
 void Bolt::initialize(const std::string& network_id)
@@ -128,8 +134,22 @@ void Bolt::initialize(const std::string& network_id)
     rt_printf("All motors and boards are ready.\n");
 }
 
-void Bolt::acquire_sensors()
-{
+
+void Bolt::fill_base_attitude_quaternion(){
+    double sr = sin(base_attitude_[0]/2.);
+    double cr = cos(base_attitude_[0]/2.);
+    double sp = sin(base_attitude_[1]/2.);
+    double cp = cos(base_attitude_[1]/2.);
+    double sy = sin(base_attitude_[2]/2.);
+    double cy = cos(base_attitude_[2]/2.);
+
+    base_attitude_quaternion_ << sr * cp * cy - cr * sp * sy,
+                                 cr * sp * cy + sr * cp * sy,
+                                 cr * cp * sy - sr * sp * cy,
+                                 cr * cp * cy + sr * sp * sy;
+}
+
+void Bolt::acquire_sensors() {
     /**
      * Joint data
      */
@@ -148,6 +168,37 @@ void Bolt::acquire_sensors()
     /**
      * Additional data
      */
+    base_accelerometer_ << main_board_ptr_->imu_data_accelerometer(0),
+            main_board_ptr_->imu_data_accelerometer(1),
+            main_board_ptr_->imu_data_accelerometer(2);
+
+//    base_gyroscope_ << main_board_ptr_->imu_data_gyroscope(2),
+//                       -main_board_ptr_->imu_data_gyroscope(0),
+//                       main_board_ptr_->imu_data_gyroscope(1);
+
+    base_gyroscope_ << -main_board_ptr_->imu_data_gyroscope(0),
+            -main_board_ptr_->imu_data_gyroscope(1),
+            -main_board_ptr_->imu_data_gyroscope(2);
+
+//    base_attitude_ << main_board_ptr_->imu_data_attitude(1),
+//                      main_board_ptr_->imu_data_attitude(0) - M_PI / 2,
+//                      -main_board_ptr_->imu_data_attitude(2);
+
+    if (first == true){
+        bias_yaw = main_board_ptr_->imu_data_attitude(2);
+        first = false;
+    }
+
+    base_attitude_ << main_board_ptr_->imu_data_attitude(0),
+            main_board_ptr_->imu_data_attitude(1),
+            main_board_ptr_->imu_data_attitude(2) - bias_yaw;
+
+
+    base_linear_acceleration_ << main_board_ptr_->imu_data_linear_acceleration(0),
+                                 main_board_ptr_->imu_data_linear_acceleration(1),
+                                 main_board_ptr_->imu_data_linear_acceleration(2);
+
+    fill_base_attitude_quaternion();
 
     // acquire the slider positions
     /// @todo: Handle case that no new values are arriving.

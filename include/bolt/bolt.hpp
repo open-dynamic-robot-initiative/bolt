@@ -12,6 +12,7 @@
 #include "blmc_drivers/serial_reader.hpp"
 #include "blmc_robots/blmc_joint_module.hpp"
 #include "blmc_robots/common_header.hpp"
+#include<math.h>
 
 namespace bolt
 {
@@ -23,6 +24,8 @@ namespace bolt
  * @brief Vector6d shortcut for the eigen vector of size BOLT_NB_MOTOR.
  */
 typedef Eigen::Matrix<double, BOLT_NB_MOTOR, 1> Vector6d;
+typedef Eigen::Matrix<double, 3, 1> Vector3d;
+typedef Eigen::Matrix<double, 4, 1> Vector4d;
 
 /**
  * @brief Driver for the Bolt biped robot.
@@ -78,6 +81,11 @@ public:
      * this method has to be called prior to any getter to have up to date data.
      */
     void acquire_sensors();
+
+    /**
+     * @brief Fill attitude quaternion.
+     */
+    void fill_base_attitude_quaternion();
 
     /**
      * @brief Calibrate the joints by moving to the next joint index position.
@@ -193,6 +201,66 @@ public:
     const Eigen::Ref<Vector6d> get_joint_encoder_index()
     {
         return joint_encoder_index_;
+    }
+
+    /**
+    * @brief get_base_accelerometer
+    * @return the base_accelerometer
+    * WARNING !!!!
+    * The method <acquire_sensors>"()" has to be called
+    * prior to any getter to have up to date data.
+    */
+    const Eigen::Ref<Vector3d> get_base_accelerometer()
+    {
+        return base_accelerometer_;
+    }
+
+    /**
+    * @brief get_base_accelerometer
+    * @return the base_accelerometer
+    * WARNING !!!!
+    * The method <acquire_sensors>"()" has to be called
+    * prior to any getter to have up to date data.
+    */
+    const Eigen::Ref<Vector3d> get_base_gyroscope()
+    {
+        return base_gyroscope_;
+    }
+
+    /**
+    * @brief get_base_accelerometer
+    * @return the base_accelerometer
+    * WARNING !!!!
+    * The method <acquire_sensors>"()" has to be called
+    * prior to any getter to have up to date data.
+    */
+    const Eigen::Ref<Vector3d> get_base_attitude()
+    {
+        return base_attitude_;
+    }
+
+    /**
+    * @brief get_base_accelerometer
+    * @return the base_accelerometer
+    * WARNING !!!!
+    * The method <acquire_sensors>"()" has to be called
+    * prior to any getter to have up to date data.
+    */
+    const Eigen::Ref<Vector3d> get_base_linear_acceleration()
+    {
+        return base_linear_acceleration_;
+    }
+
+    /**
+    * @brief get_base_accelerometer
+    * @return the base_accelerometer
+    * WARNING !!!!
+    * The method <acquire_sensors>"()" has to be called
+    * prior to any getter to have up to date data.
+    */
+    const Eigen::Ref<Vector4d> get_base_attitude_quaternion()
+    {
+        return base_attitude_quaternion_;
     }
 
     /**
@@ -360,6 +428,27 @@ private:
 
     /** @brief E-stop from the slider box. */
     bool active_estop_;
+
+    /** @brief base accelerometer. */
+    Vector3d base_accelerometer_;
+
+    /** @brief base accelerometer. */
+    Vector3d base_gyroscope_;
+
+    /** @brief base accelerometer. */
+    Vector3d base_attitude_;
+
+    /** @brief base accelerometer. */
+    Vector3d base_linear_acceleration_;
+
+    /** @brief base attitude quaternion. */
+    Vector4d base_attitude_quaternion_;
+
+    /** @brief bias yaw. */
+    double bias_yaw;
+
+    /** @brief is it first loop. */
+    bool first;
 
     /** @brief Integers from the serial port.
      * - 4 sliders in [0, 1024]
