@@ -493,6 +493,8 @@ private:
      * @brief Reader for serial port to read arduino slider values.
      */
     std::shared_ptr<blmc_drivers::SerialReader> serial_reader_;
+
+    bool safe_mode_ = false;
 };
 
 }  // namespace bolt

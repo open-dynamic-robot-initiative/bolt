@@ -65,7 +65,7 @@ Bolt::Bolt()
      */
 
     // for now this value is very small but it is currently for debug mode
-    motor_max_current_.fill(8.0);  // TODO: set as paramters?
+    motor_max_current_.fill(12.0);  // TODO: set as paramters?
     motor_torque_constants_.fill(0.025);
     motor_inertias_.fill(0.045);
     joint_gear_ratios_.fill(9.0);
@@ -243,7 +243,19 @@ void Bolt::acquire_sensors() {
 void Bolt::send_target_joint_torque(
     const Eigen::Ref<Vector6d> target_joint_torque)
 {
-    Vector6d ctrl_torque = target_joint_torque;
+    Vector6d ctrl_torque;
+    if(base_attitude_(1) < 0.6 && base_attitude_(1) > -0.6 &&
+       (base_attitude_(0) < -2.5 || base_attitude_(0) > 2.5) && !safe_mode_) {
+        ctrl_torque= target_joint_torque;
+    }
+    else if(!safe_mode_){
+        safe_mode_ = true;
+        std::cout << "Attitude Safe Mode zero torque\n";
+        ctrl_torque = 0. * target_joint_torque;
+    }
+    else{
+        ctrl_torque = 0. * target_joint_torque;
+    }
     ctrl_torque = ctrl_torque.array().min(max_joint_torques_);
     ctrl_torque = ctrl_torque.array().max(-max_joint_torques_);
     joints_.set_torques(ctrl_torque);
