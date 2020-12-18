@@ -1,87 +1,81 @@
-######################
-# set up the project #
-######################
-cmake_minimum_required(VERSION 2.8.3)
+#
+# Copyright (c) 2019, New York University and Max Planck Gesellschaft.
+# License BSD-3 clause
+#
 
-project(bolt)
+#
+# set up the project
+#
+cmake_minimum_required(VERSION 3.10.2)
 
-# required to use std::shared_ptr in code and to link the python bindings
-if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--no-as-needed")
-endif()
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra")
+project(bolt VERSION 1.0.0)
 
-# ensuring path to libraries are set during install
-set(CMAKE_SKIP_BUILD_RPATH  FALSE)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib)
+# specify the C++ 17 standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-############################
-# Search for dependencies. #
-############################
+# Some additionnal optimization for the code.
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -funroll-loops -fPIC")
 
-set(CATKIN_PKGS ${CATKIN_PKGS}
+# build tools
+find_package(ament_cmake REQUIRED)
+find_package(mpi_cmake_modules REQUIRED)
+
+# depend on ament macros
+find_package(ament_index_cpp REQUIRED)
+find_package(blmc_drivers REQUIRED)
+find_package(real_time_tools REQUIRED)
+find_package(pybind11 REQUIRED)
+find_package(yaml_utils REQUIRED)
+find_package(blmc_robots REQUIRED)
+
+# export de dependencies
+ament_export_dependencies(
+  ament_cmake
   mpi_cmake_modules
-  real_time_tools
-  pybind11_catkin
-  yaml_cpp_catkin
-  
+  ament_index_cpp
   blmc_drivers
-  blmc_robots
-  robot_properties_bolt
-)
-find_package(catkin REQUIRED COMPONENTS ${CATKIN_PKGS})
+  real_time_tools
+  pybind11
+  yaml_utils
+  blmc_robots)
 
-search_for_eigen()
-
-##################
-# Python package #
-##################
-
-catkin_python_setup()
-
-######################################################
-# define the include directory of all ${CATKIN_PKGS} #
-######################################################
-include_directories(
-    include
-    ${catkin_INCLUDE_DIRS}
-)
-
-##########################################
-# export the package as a catkin package #
-##########################################
-set(exported_libraries
-  ${PROJECT_NAME}
-)
-catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES ${exported_libraries}
-  CATKIN_DEPENDS ${CATKIN_PKGS}
-)
-
-########################################################
-# manage the creation of the libraries and executables #
-########################################################
+# prepare the final export
+ament_export_interfaces(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
+#
+#
+# manage the creation of the libraries and executables
+#
 add_subdirectory(src)
 
-#########################
-# manage the unit tests #
-#########################
-add_subdirectory(tests)
+#
+# Manage the unit tests.
+#
+if(BUILD_TESTING)
+  add_subdirectory(tests)
+endif()
 
-####################
-# manage the demos #
-####################
+#
+# Manage the demos.
+#
 add_subdirectory(demos)
 
-###################
-# python bindings #
-###################
+#
+# Python bindings.
+#
 add_subdirectory(srcpy)
 
-##########################
-# building documentation #
-##########################
-build_doxygen_documentation()
+#
+# Install the package
+#
+install(DIRECTORY include/ DESTINATION include)
+
+#
+# Building documentation.
+#
+add_documentation()
+
+#
+# Export as an ament_package
+#
+ament_package()
