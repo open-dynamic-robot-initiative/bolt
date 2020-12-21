@@ -128,9 +128,14 @@ void Bolt::initialize(const std::string& network_id)
     serial_reader_ = std::make_shared<blmc_drivers::SerialReader>(
         "serial_port", BOLT_NB_SLIDER + 1);
 
-    std::chrono::time_point<std::chrono::system_clock> last = std::chrono::system_clock::now();
-    while (!main_board_ptr_->IsTimeout() && !main_board_ptr_->IsAckMsgReceived()) {
-        if (((std::chrono::duration<double>)(std::chrono::system_clock::now() - last)).count() > 0.001)
+    std::chrono::time_point<std::chrono::system_clock> last =
+        std::chrono::system_clock::now();
+    while (!main_board_ptr_->IsTimeout() &&
+           !main_board_ptr_->IsAckMsgReceived())
+    {
+        if (((std::chrono::duration<double>)(std::chrono::system_clock::now() -
+                                             last))
+                .count() > 0.001)
         {
             last = std::chrono::system_clock::now();
             main_board_ptr_->SendInit();
@@ -143,22 +148,22 @@ void Bolt::initialize(const std::string& network_id)
     rt_printf("All motors and boards are ready.\n");
 }
 
-
-void Bolt::fill_base_attitude_quaternion(){
-    double sr = sin(base_attitude_[0]/2.);
-    double cr = cos(base_attitude_[0]/2.);
-    double sp = sin(base_attitude_[1]/2.);
-    double cp = cos(base_attitude_[1]/2.);
-    double sy = sin(base_attitude_[2]/2.);
-    double cy = cos(base_attitude_[2]/2.);
+void Bolt::fill_base_attitude_quaternion()
+{
+    double sr = sin(base_attitude_[0] / 2.);
+    double cr = cos(base_attitude_[0] / 2.);
+    double sp = sin(base_attitude_[1] / 2.);
+    double cp = cos(base_attitude_[1] / 2.);
+    double sy = sin(base_attitude_[2] / 2.);
+    double cy = cos(base_attitude_[2] / 2.);
 
     base_attitude_quaternion_ << sr * cp * cy - cr * sp * sy,
-                                 cr * sp * cy + sr * cp * sy,
-                                 cr * cp * sy - sr * sp * cy,
-                                 cr * cp * cy + sr * sp * sy;
+        cr * sp * cy + sr * cp * sy, cr * cp * sy - sr * sp * cy,
+        cr * cp * cy + sr * sp * sy;
 }
 
-void Bolt::acquire_sensors() {
+void Bolt::acquire_sensors()
+{
     /**
      * Joint data
      */
@@ -178,34 +183,35 @@ void Bolt::acquire_sensors() {
      * Additional data
      */
     base_accelerometer_ << main_board_ptr_->imu_data_accelerometer(0),
-            main_board_ptr_->imu_data_accelerometer(1),
-            main_board_ptr_->imu_data_accelerometer(2);
+        main_board_ptr_->imu_data_accelerometer(1),
+        main_board_ptr_->imu_data_accelerometer(2);
 
-//    base_gyroscope_ << main_board_ptr_->imu_data_gyroscope(2),
-//                       -main_board_ptr_->imu_data_gyroscope(0),
-//                       main_board_ptr_->imu_data_gyroscope(1);
+    //    base_gyroscope_ << main_board_ptr_->imu_data_gyroscope(2),
+    //                       -main_board_ptr_->imu_data_gyroscope(0),
+    //                       main_board_ptr_->imu_data_gyroscope(1);
 
     base_gyroscope_ << -main_board_ptr_->imu_data_gyroscope(0),
-            -main_board_ptr_->imu_data_gyroscope(1),
-            -main_board_ptr_->imu_data_gyroscope(2);
+        -main_board_ptr_->imu_data_gyroscope(1),
+        -main_board_ptr_->imu_data_gyroscope(2);
 
-//    base_attitude_ << main_board_ptr_->imu_data_attitude(1),
-//                      main_board_ptr_->imu_data_attitude(0) - M_PI / 2,
-//                      -main_board_ptr_->imu_data_attitude(2);
+    //    base_attitude_ << main_board_ptr_->imu_data_attitude(1),
+    //                      main_board_ptr_->imu_data_attitude(0) - M_PI / 2,
+    //                      -main_board_ptr_->imu_data_attitude(2);
 
-    if (first == true){
+    if (first == true)
+    {
         bias_yaw = main_board_ptr_->imu_data_attitude(2);
         first = false;
     }
 
     base_attitude_ << main_board_ptr_->imu_data_attitude(0),
-            main_board_ptr_->imu_data_attitude(1),
-            main_board_ptr_->imu_data_attitude(2) - bias_yaw;
+        main_board_ptr_->imu_data_attitude(1),
+        main_board_ptr_->imu_data_attitude(2) - bias_yaw;
 
-
-    base_linear_acceleration_ << main_board_ptr_->imu_data_linear_acceleration(0),
-                                 main_board_ptr_->imu_data_linear_acceleration(1),
-                                 main_board_ptr_->imu_data_linear_acceleration(2);
+    base_linear_acceleration_
+        << main_board_ptr_->imu_data_linear_acceleration(0),
+        main_board_ptr_->imu_data_linear_acceleration(1),
+        main_board_ptr_->imu_data_linear_acceleration(2);
 
     fill_base_attitude_quaternion();
 
@@ -253,16 +259,19 @@ void Bolt::send_target_joint_torque(
     const Eigen::Ref<Vector6d> target_joint_torque)
 {
     Vector6d ctrl_torque;
-    if(base_attitude_(1) < 0.6 && base_attitude_(1) > -0.6 &&
-       (base_attitude_(0) < -2.5 || base_attitude_(0) > 2.5) && !safe_mode_) {
-        ctrl_torque= target_joint_torque;
+    if (base_attitude_(1) < 0.6 && base_attitude_(1) > -0.6 &&
+        (base_attitude_(0) < -2.5 || base_attitude_(0) > 2.5) && !safe_mode_)
+    {
+        ctrl_torque = target_joint_torque;
     }
-    else if(!safe_mode_){
+    else if (!safe_mode_)
+    {
         safe_mode_ = true;
         std::cout << "Attitude Safe Mode zero torque\n";
         ctrl_torque = 0. * target_joint_torque;
     }
-    else{
+    else
+    {
         ctrl_torque = 0. * target_joint_torque;
     }
     ctrl_torque = ctrl_torque.array().min(max_joint_torques_);

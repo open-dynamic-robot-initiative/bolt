@@ -8,11 +8,11 @@
  */
 #pragma once
 
+#include <math.h>
 #include "blmc_drivers/devices/spi_motor_board.hpp"
 #include "blmc_drivers/serial_reader.hpp"
 #include "blmc_robots/blmc_joint_module.hpp"
 #include "blmc_robots/common_header.hpp"
-#include<math.h>
 
 namespace bolt
 {
@@ -204,60 +204,60 @@ public:
     }
 
     /**
-    * @brief get_base_accelerometer
-    * @return the base_accelerometer
-    * WARNING !!!!
-    * The method <acquire_sensors>"()" has to be called
-    * prior to any getter to have up to date data.
-    */
+     * @brief get_base_accelerometer
+     * @return the base_accelerometer
+     * WARNING !!!!
+     * The method <acquire_sensors>"()" has to be called
+     * prior to any getter to have up to date data.
+     */
     const Eigen::Ref<Vector3d> get_base_accelerometer()
     {
         return base_accelerometer_;
     }
 
     /**
-    * @brief get_base_accelerometer
-    * @return the base_accelerometer
-    * WARNING !!!!
-    * The method <acquire_sensors>"()" has to be called
-    * prior to any getter to have up to date data.
-    */
+     * @brief get_base_accelerometer
+     * @return the base_accelerometer
+     * WARNING !!!!
+     * The method <acquire_sensors>"()" has to be called
+     * prior to any getter to have up to date data.
+     */
     const Eigen::Ref<Vector3d> get_base_gyroscope()
     {
         return base_gyroscope_;
     }
 
     /**
-    * @brief get_base_accelerometer
-    * @return the base_accelerometer
-    * WARNING !!!!
-    * The method <acquire_sensors>"()" has to be called
-    * prior to any getter to have up to date data.
-    */
+     * @brief get_base_accelerometer
+     * @return the base_accelerometer
+     * WARNING !!!!
+     * The method <acquire_sensors>"()" has to be called
+     * prior to any getter to have up to date data.
+     */
     const Eigen::Ref<Vector3d> get_base_attitude()
     {
         return base_attitude_;
     }
 
     /**
-    * @brief get_base_accelerometer
-    * @return the base_accelerometer
-    * WARNING !!!!
-    * The method <acquire_sensors>"()" has to be called
-    * prior to any getter to have up to date data.
-    */
+     * @brief get_base_accelerometer
+     * @return the base_accelerometer
+     * WARNING !!!!
+     * The method <acquire_sensors>"()" has to be called
+     * prior to any getter to have up to date data.
+     */
     const Eigen::Ref<Vector3d> get_base_linear_acceleration()
     {
         return base_linear_acceleration_;
     }
 
     /**
-    * @brief get_base_accelerometer
-    * @return the base_accelerometer
-    * WARNING !!!!
-    * The method <acquire_sensors>"()" has to be called
-    * prior to any getter to have up to date data.
-    */
+     * @brief get_base_accelerometer
+     * @return the base_accelerometer
+     * WARNING !!!!
+     * The method <acquire_sensors>"()" has to be called
+     * prior to any getter to have up to date data.
+     */
     const Eigen::Ref<Vector4d> get_base_attitude_quaternion()
     {
         return base_attitude_quaternion_;
