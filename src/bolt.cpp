@@ -128,6 +128,15 @@ void Bolt::initialize(const std::string& network_id)
     serial_reader_ = std::make_shared<blmc_drivers::SerialReader>(
         "serial_port", BOLT_NB_SLIDER + 1);
 
+    std::chrono::time_point<std::chrono::system_clock> last = std::chrono::system_clock::now();
+    while (!main_board_ptr_->IsTimeout() && !main_board_ptr_->IsAckMsgReceived()) {
+        if (((std::chrono::duration<double>)(std::chrono::system_clock::now() - last)).count() > 0.001)
+        {
+            last = std::chrono::system_clock::now();
+            main_board_ptr_->SendInit();
+        }
+    }
+
     // Wait until all the motors are ready.
     spi_bus_->wait_until_ready();
 
