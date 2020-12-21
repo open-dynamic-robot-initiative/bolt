@@ -33,7 +33,7 @@ int main(int argc, char** argv)
     if (argc != 2)
     {
         throw std::runtime_error(
-            "Wrong number of argument: `./demo_solo12_calibration "
+            "Wrong number of argument: `./demo_bolt_calibration "
             "network_id`.");
     }
 

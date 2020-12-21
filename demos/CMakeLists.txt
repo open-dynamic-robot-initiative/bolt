@@ -27,12 +27,12 @@ macro(create_demo demo_name)
   target_link_libraries(${demo_name} ${PROJECT_NAME})
 
   # Check if the file exists.
-  if(package_name AND resource_path)
+#  if(package_name AND resource_path)
     target_compile_definitions(
-    demo_${demo_name} PUBLIC
-    ROBOT_PROPERTIES_PACKAGE_NAME="${package_name}"
-    ROBOT_PROPERTIES_YAML_PATH="${config_file}")
-  endif()
+      ${demo_name} PUBLIC
+      ROBOT_PROPERTIES_PACKAGE_NAME="${package_name}"
+      ROBOT_PROPERTIES_YAML_PATH="${config_file}")
+#  endif()
 
 endmacro(create_demo demo_name)
 
