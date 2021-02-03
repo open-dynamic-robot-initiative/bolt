@@ -286,9 +286,9 @@ bool Bolt::calibrate(const Vector6d& home_offset_rad)
     double search_distance_limit_rad =
         10.0 * (2.0 * M_PI / joint_gear_ratios_(0));
     Vector6d profile_step_size_rad = Vector6d::Constant(0.001);
-    blmc_robots::HomingReturnCode homing_return_code = joints_.execute_homing(
+    blmc_drivers::HomingReturnCode homing_return_code = joints_.execute_homing(
         search_distance_limit_rad, home_offset_rad, profile_step_size_rad);
-    if (homing_return_code == blmc_robots::HomingReturnCode::FAILED)
+    if (homing_return_code == blmc_drivers::HomingReturnCode::FAILED)
     {
         return false;
     }
