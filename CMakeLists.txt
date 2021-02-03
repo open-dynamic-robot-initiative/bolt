@@ -1,6 +1,6 @@
 #
-# Copyright (c) 2019, New York University and Max Planck Gesellschaft.
-# License BSD-3 clause
+# Copyright (c) 2019, New York University and Max Planck Gesellschaft. License
+# BSD-3 clause
 #
 
 #
@@ -42,7 +42,6 @@ ament_export_dependencies(
 
 # prepare the final export
 ament_export_interfaces(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
-#
 #
 # manage the creation of the libraries and executables
 #
