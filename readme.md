@@ -7,6 +7,9 @@ Drivers of the bolt robot.
 ## Authors
 
 - Maximilien Naveau
+- Julian Viereck
+- Majid Khadiv
+- Elham Daneshmand 
 
 ## Copyrights
 
