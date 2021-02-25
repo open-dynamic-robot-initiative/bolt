@@ -24,7 +24,7 @@
 namespace py = pybind11;
 using namespace bolt;
 
-PYBIND11_MODULE(py_bolt, m)
+PYBIND11_MODULE(bolt, m)
 {
     py::class_<Bolt>(m, "Bolt")
         .def(py::init<>())
@@ -33,9 +33,6 @@ PYBIND11_MODULE(py_bolt, m)
         .def("send_target_joint_torque",
              &Bolt::send_target_joint_torque,
              py::arg("target_joint_torque"))
-        .def("set_max_joint_torques",
-             &Bolt::set_max_joint_torques,
-             py::arg("max_joint_torques"))
         .def("get_motor_board_errors", &Bolt::get_motor_board_errors)
         .def("get_motor_board_enabled", &Bolt::get_motor_board_enabled)
         .def("get_motor_enabled", &Bolt::get_motor_enabled)

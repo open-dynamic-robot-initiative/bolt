@@ -10,7 +10,7 @@
  */
 
 #include "bolt/bolt.hpp"
-#include "bolt/common_demo_header.hpp"
+#include "bolt/utils.hpp"
 
 using namespace bolt;
 typedef ThreadCalibrationData<Bolt> ThreadCalibrationData_t;
@@ -19,16 +19,30 @@ static THREAD_FUNCTION_RETURN_TYPE control_loop(void* thread_data_void_ptr)
 {
     ThreadCalibrationData_t* thread_data_ptr =
         (static_cast<ThreadCalibrationData_t*>(thread_data_void_ptr));
-    Vector6d joint_index_to_zero = thread_data_ptr->joint_index_to_zero;
-    thread_data_ptr->robot->calibrate(joint_index_to_zero);
 
-    blmc_robots::CTRL_C_DETECTED = true;
+    Bolt& robot = *thread_data_ptr->robot;
+
+    // ask for calibration
+    robot.request_calibration();
+
+    // The calibration commend is computed in the send_target_joint_torque.
+    Eigen::Vector6d dummy_command = Eigen::Vector6d::Zero();
+    real_time_tools::Spinner spinner;
+    spinner.set_period(0.001);
+    while (!CTRL_C_DETECTED && robot.is_calibrating())
+    {
+        robot.acquire_sensors();
+        robot.send_target_joint_torque(dummy_command);
+        spinner.spin();
+    }
+
+    CTRL_C_DETECTED = true;
     return THREAD_FUNCTION_RETURN_VALUE;
 }  // end control_loop
 
 int main(int argc, char** argv)
 {
-    blmc_robots::enable_ctrl_c();
+    enable_ctrl_c();
 
     if (argc != 2)
     {

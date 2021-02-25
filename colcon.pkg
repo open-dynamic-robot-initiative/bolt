@@ -1,0 +1,4 @@
+{
+    "run-dependencies": ["robot_properties_bolt"],
+    "test-dependencies": ["googletest-distribution"]
+}

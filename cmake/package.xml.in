@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>bolt</name>
+  <version>1.0.0</version>
+  <description>Drivers and interfaces to the Bolt robot.</description>
+  <author email="mnaveau@tue.mpg.de">Maximilien Naveau</author>
+  <maintainer email="mnaveau@tue.mpg.de">Maximilien Naveau</maintainer>
+  <license>BSD-3-clause</license>
+
+  <!-- ROS2 build -->
+  <buildtool_depend>mpi_cmake_modules</buildtool_depend>
+
+  <depend>pybind11</depend>
+  <depend>odri_control_interface</depend>
+  <depend>real_time_tools</depend>
+  <depend>dynamic_graph_manager</depend>
+
+</package>

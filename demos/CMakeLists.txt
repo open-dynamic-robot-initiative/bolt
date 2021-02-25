@@ -4,16 +4,13 @@
 
 set(all_demo_targets)
 
+string(
+  CONCAT odri_control_interface_yaml_path
+         "${PythonModules_robot_properties_bolt_PATH}/"
+         "robot_properties_bolt/robot_properties_bolt/odri_control_interface/"
+         "bolt_driver.yaml")
+
 macro(create_demo demo_name)
-  # Cannot use ARGN directly with list() command, so copy it to a variable
-  set(extra_macro_args ${ARGN})
-
-  # Did we get any optional args?
-  list(LENGTH extra_macro_args num_extra_args)
-  if(${num_extra_args} GREATER 0)
-    list(GET extra_macro_args 0 config_file)
-  endif()
-
   # Add the executable of the demo.
   add_executable(${demo_name} ${demo_name}.cpp)
 
@@ -24,11 +21,11 @@ macro(create_demo demo_name)
   # Add the dependencies.
   target_link_libraries(${demo_name} ${PROJECT_NAME})
 
-  # Check if the file exists.
-  # if(package_name AND resource_path)
+  # Check if the file exists. if(package_name AND resource_path)
   target_compile_definitions(
-    ${demo_name} PUBLIC ROBOT_PROPERTIES_PACKAGE_NAME="${package_name}"
-                        ROBOT_PROPERTIES_YAML_PATH="${config_file}")
+    ${demo_name}
+    PUBLIC
+      ODRI_CONTROL_INTERFACE_YAML_PATH="${odri_control_interface_yaml_path}")
   # endif()
 
 endmacro(create_demo demo_name)
@@ -39,5 +36,4 @@ endmacro(create_demo demo_name)
 
 create_demo(demo_bolt)
 
-create_demo(demo_bolt_calibration robot_properties_bolt
-            dgm_parameters_bolt.yaml)
+create_demo(demo_bolt_calibration)
