@@ -30,15 +30,15 @@ list(APPEND all_src_targets bolt)
 #
 # Hardware calibration program.
 #
-add_executable(hardware_calibration programs/hardware_calibration.cpp)
+add_executable(bolt_hardware_calibration programs/hardware_calibration.cpp)
 # Add the include dependencies.
 target_include_directories(
-  hardware_calibration PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    bolt_hardware_calibration PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
                               $<INSTALL_INTERFACE:include>)
 # Link the dependencies.
-target_link_libraries(hardware_calibration bolt)
+target_link_libraries(bolt_hardware_calibration bolt)
 # Export the target.
-list(APPEND all_src_targets hardware_calibration)
+list(APPEND all_src_targets bolt_hardware_calibration)
 
 #
 # Optionally compile the dynamic_graph_manager Bolt wrapper.
@@ -91,6 +91,6 @@ install(
   EXPORT ${PROJECT_NAME}Targets
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
-  RUNTIME DESTINATION lib/${PROJECT_NAME}
+  RUNTIME DESTINATION bin
   INCLUDES
   DESTINATION include)
