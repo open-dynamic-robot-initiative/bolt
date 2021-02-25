@@ -2,20 +2,24 @@
 # Python bindings.
 #
 
-#
-add_library(py_bolt MODULE py_bolt.cpp)
+# Python wrapper
+set(wrapper_name bolt_cpp)
 
-target_link_libraries(py_bolt PRIVATE pybind11::module)
+add_library(${wrapper_name} MODULE py_bolt.cpp)
 
-target_link_libraries(py_bolt PRIVATE bolt)
+target_link_libraries(${wrapper_name} PRIVATE pybind11::module)
 
-set_target_properties(py_bolt PROPERTIES PREFIX "" SUFFIX
+target_link_libraries(${wrapper_name} PRIVATE bolt)
+
+set_target_properties(${wrapper_name} PROPERTIES PREFIX "" SUFFIX
                                                    "${PYTHON_MODULE_EXTENSION}")
 
 target_include_directories(
-  py_bolt
+  ${wrapper_name}
   PUBLIC BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
          $<INSTALL_INTERFACE:include> SYSTEM
   PUBLIC ${PYTHON_INCLUDE_DIRS})
-_ament_cmake_python_get_python_install_dir()
-install(TARGETS py_bolt DESTINATION ${PYTHON_INSTALL_DIR})
+
+get_python_install_dir(python_install_dir)
+
+install(TARGETS ${wrapper_name} DESTINATION ${python_install_dir})

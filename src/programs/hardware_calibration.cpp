@@ -18,28 +18,34 @@
  *      date to you favorite configuration file.
  */
 
-#include "blmc_robots/common_programs_header.hpp"
+#include "bolt/utils.hpp"
 #include "bolt/bolt.hpp"
 
-using namespace blmc_robots;
 using namespace bolt;
 
 static THREAD_FUNCTION_RETURN_TYPE control_loop(void* robot_void_ptr)
 {
     Bolt& robot = *(static_cast<Bolt*>(robot_void_ptr));
 
-    Vector6d joint_index_to_zero;
-    joint_index_to_zero.fill(0.0);
-    bool good_calibration = robot.calibrate(joint_index_to_zero);
+    Eigen::Vector6d joint_index_to_zero = Eigen::Vector6d::Zero();
+    robot.request_calibration(joint_index_to_zero);
 
-    long int count = 0;
-    while (!CTRL_C_DETECTED && good_calibration)
+    Eigen::Vector6d dummy_command = Eigen::Vector6d::Zero();
+    real_time_tools::Spinner spinner;
+    spinner.set_period(0.001);
+    while (!CTRL_C_DETECTED && robot.is_calibrating())
     {
-        if (count % 200 == 0)
-        {
-            robot.acquire_sensors();
-            print_vector("Joint Positions", robot.get_joint_positions());
-        }
+        robot.acquire_sensors();
+        robot.send_target_joint_torque(dummy_command);
+        spinner.spin();
+    }
+
+    spinner.set_period(0.5);
+    while (!CTRL_C_DETECTED)
+    {
+        robot.acquire_sensors();
+        print_vector("Joint Positions", robot.get_joint_positions());
+        spinner.spin();
     }
 
     return THREAD_FUNCTION_RETURN_VALUE;
