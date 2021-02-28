@@ -33,8 +33,9 @@ list(APPEND all_src_targets bolt)
 add_executable(bolt_hardware_calibration programs/hardware_calibration.cpp)
 # Add the include dependencies.
 target_include_directories(
-    bolt_hardware_calibration PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-                              $<INSTALL_INTERFACE:include>)
+  bolt_hardware_calibration
+  PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+         $<INSTALL_INTERFACE:include>)
 # Link the dependencies.
 target_link_libraries(bolt_hardware_calibration bolt)
 # Export the target.
@@ -77,7 +78,9 @@ if(${dynamic_graph_manager_FOUND})
            "dgm_parameters_bolt.yaml")
   target_compile_definitions(
     dg_main_bolt
-    PUBLIC DYNAMIC_GRAPH_MANAGER_YAML_PATH="${dynamic_graph_manager_yaml_file}")
+    PUBLIC
+      DYNAMIC_GRAPH_MANAGER_YAML_PATH="${dynamic_graph_manager_yaml_file}"
+      ODRI_CONTROL_INTERFACE_YAML_PATH="${ODRI_CONTROL_INTERFACE_YAML_PATH}")
   # Export.
   list(APPEND all_src_targets dg_main_bolt)
 

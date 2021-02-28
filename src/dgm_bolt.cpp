@@ -27,9 +27,6 @@ void DGMBolt::initialize_hardware_communication_process()
     /**
      * Load the calibration parameters
      */
-    YAML::ReadParameter(params_["joint_calibrator"],
-                        "position_offsets",
-                        zero_to_index_angle_from_file_);
 
     // get the hardware communication ros node handle
     dynamic_graph_manager::RosNodePtr ros_node_handle =
