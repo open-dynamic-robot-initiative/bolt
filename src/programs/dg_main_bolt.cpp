@@ -7,6 +7,7 @@
  * This file uses the TestBench8Motors class in a small demo.
  */
 
+#include <fstream>
 #include "bolt/dgm_bolt.hpp"
 
 int main(int, char*[])
@@ -15,6 +16,9 @@ int main(int, char*[])
     std::cout << "Loading parameters from " << DYNAMIC_GRAPH_MANAGER_YAML_PATH
               << std::endl;
     std::string yaml_path = DYNAMIC_GRAPH_MANAGER_YAML_PATH;
+    std::ifstream f(filename.c_str());                                  \
+    if (!f.good())                                                      \
+    assert()
     YAML::Node param = YAML::LoadFile(yaml_path);
     // Create the dgm.
     bolt::DGMBolt dgm;
