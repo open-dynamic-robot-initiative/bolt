@@ -79,8 +79,7 @@ if(${dynamic_graph_manager_FOUND})
   target_compile_definitions(
     dg_main_bolt
     PUBLIC
-      DYNAMIC_GRAPH_MANAGER_YAML_PATH="${dynamic_graph_manager_yaml_file}"
-      ODRI_CONTROL_INTERFACE_YAML_PATH="${ODRI_CONTROL_INTERFACE_YAML_PATH}")
+      DYNAMIC_GRAPH_MANAGER_YAML_PATH="${dynamic_graph_manager_yaml_file}")
   # Export.
   list(APPEND all_src_targets dg_main_bolt)
 
