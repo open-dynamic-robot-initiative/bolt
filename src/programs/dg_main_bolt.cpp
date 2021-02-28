@@ -13,12 +13,15 @@
 int main(int, char*[])
 {
     // Get the dynamic_graph_manager config file.
-    std::cout << "Loading parameters from " << DYNAMIC_GRAPH_MANAGER_YAML_PATH
-              << std::endl;
     std::string yaml_path = DYNAMIC_GRAPH_MANAGER_YAML_PATH;
-    std::ifstream f(filename.c_str());                                  \
-    if (!f.good())                                                      \
-    assert()
+
+    std::cout << "Loading parameters from " << yaml_path << std::endl;
+    
+    std::ifstream f(yaml_path.c_str());
+    if (!f.good())
+    {
+        throw std::runtime_error("Error: " + yaml_path + " not found!");
+    }
     YAML::Node param = YAML::LoadFile(yaml_path);
     // Create the dgm.
     bolt::DGMBolt dgm;
