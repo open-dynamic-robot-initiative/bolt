@@ -293,7 +293,7 @@ public:
      */
     bool is_calibrating()
     {
-        return is_calibrating_;
+        return is_calibrating_ || calibrate_request_;
     }
 
 private:
