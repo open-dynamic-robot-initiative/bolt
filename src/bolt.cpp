@@ -144,7 +144,7 @@ void Bolt::acquire_sensors()
 }
 
 void Bolt::send_target_joint_torque(
-    const Eigen::Ref<Eigen::Vector6d> target_joint_torque)
+    const Eigen::Ref<const Eigen::Vector6d> target_joint_torque)
 {
     robot_->joints->SetTorques(target_joint_torque);
 
@@ -189,7 +189,7 @@ void Bolt::send_target_joint_torque(
 }
 
 void Bolt::request_calibration(
-    Eigen::Ref<const Eigen::VectorXd> home_offset_rad)
+    const Eigen::Ref<const Eigen::VectorXd> home_offset_rad)
 {
     printf("Bolt::calibrate called\n");
     calib_ctrl_->UpdatePositionOffsets(home_offset_rad);
