@@ -34,6 +34,7 @@ static THREAD_FUNCTION_RETURN_TYPE control_loop(void* robot_void_ptr)
 
     real_time_tools::Spinner spinner;
     spinner.set_period(0.001);
+    rt_printf("Running calibration...\n");
     while (!CTRL_C_DETECTED && robot.is_calibrating())
     {
         robot.acquire_sensors();
@@ -44,6 +45,7 @@ static THREAD_FUNCTION_RETURN_TYPE control_loop(void* robot_void_ptr)
     // re-send 0 torque command
     robot.send_target_joint_torque(dummy_command);
 
+    rt_printf("Running calibration... Done.\n");
     spinner.set_period(0.5);
     while (!CTRL_C_DETECTED)
     {
@@ -72,9 +74,9 @@ int main(int argc, char** argv)
     robot.initialize(argv[1]);
 
     rt_printf("Controller is set up.\n");
-    rt_printf("Press enter to launch the calibration.\n");
-    char str[256];
-    std::cin.get(str, 256);  // get c-string
+    // rt_printf("Press enter to launch the calibration.\n");
+    // char str[256];
+    // std::cin.get(str, 256);  // get c-string
 
     thread.create_realtime_thread(&control_loop, &robot);
 
