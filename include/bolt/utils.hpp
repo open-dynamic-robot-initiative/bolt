@@ -35,19 +35,6 @@ template <class ROBOT_TYPE>
 struct ThreadCalibrationData
 {
     std::shared_ptr<ROBOT_TYPE> robot;
-    Eigen::VectorXd joint_index_to_zero;
-
-    ThreadCalibrationData(std::shared_ptr<ROBOT_TYPE> robot_in)
-        : robot(robot_in)
-    {
-        std::string yaml_path = ODRI_CONTROL_INTERFACE_YAML_PATH;
-
-        std::cout << "Loading paramters from " << yaml_path << std::endl;
-        YAML::Node param = YAML::LoadFile(yaml_path);
-        YAML::ReadParameter(param["joint_calibrator"],
-                            "position_offsets",
-                            joint_index_to_zero);
-    }
 };
 
 /**
