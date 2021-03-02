@@ -58,7 +58,7 @@ public:
      * @brief send_target_torques sends the target currents to the motors
      */
     void send_target_joint_torque(
-        const Eigen::Ref<Eigen::Vector6d> target_joint_torque);
+        const Eigen::Ref<const Eigen::Vector6d> target_joint_torque);
 
     /**
      * @brief acquire_sensors acquire all available sensors, WARNING !!!!
@@ -80,7 +80,8 @@ public:
      * @return true
      * @return false
      */
-    void request_calibration(Eigen::Ref<const Eigen::VectorXd> home_offset_rad);
+    void request_calibration(
+        const Eigen::Ref<const Eigen::VectorXd> home_offset_rad);
 
     /**
      * @brief Request calibration of the joints by moving to the next joint
@@ -104,7 +105,7 @@ public:
      * The method <acquire_sensors>"()" has to be called
      * prior to any getter to have up to date data.
      */
-    const Eigen::Ref<Eigen::Vector6d> get_joint_positions()
+    const Eigen::Ref<const Eigen::Vector6d> get_joint_positions()
     {
         return joint_positions_;
     }
@@ -116,7 +117,7 @@ public:
      * The method <acquire_sensors>"()" has to be called
      * prior to any getter to have up to date data.
      */
-    const Eigen::Ref<Eigen::Vector6d> get_joint_velocities()
+    const Eigen::Ref<const Eigen::Vector6d> get_joint_velocities()
     {
         return joint_velocities_;
     }
@@ -128,7 +129,7 @@ public:
      * The method <acquire_sensors>"()" has to be called
      * prior to any getter to have up to date data.
      */
-    const Eigen::Ref<Eigen::Vector6d> get_joint_torques()
+    const Eigen::Ref<const Eigen::Vector6d> get_joint_torques()
     {
         return joint_torques_;
     }
@@ -141,7 +142,7 @@ public:
      * prior to any getter to have up to date data.
 
      */
-    const Eigen::Ref<Eigen::Vector6d> get_joint_target_torques()
+    const Eigen::Ref<const Eigen::Vector6d> get_joint_target_torques()
     {
         return joint_target_torques_;
     }
@@ -153,7 +154,7 @@ public:
      * The method <acquire_sensors>"()" has to be called
      * prior to any getter to have up to date data.
      */
-    const Eigen::Ref<Eigen::Vector3d> get_base_accelerometer()
+    const Eigen::Ref<const Eigen::Vector3d> get_base_accelerometer()
     {
         return base_accelerometer_;
     }
@@ -165,7 +166,7 @@ public:
      * The method <acquire_sensors>"()" has to be called
      * prior to any getter to have up to date data.
      */
-    const Eigen::Ref<Eigen::Vector3d> get_base_gyroscope()
+    const Eigen::Ref<const Eigen::Vector3d> get_base_gyroscope()
     {
         return base_gyroscope_;
     }
@@ -177,7 +178,7 @@ public:
      * The method <acquire_sensors>"()" has to be called
      * prior to any getter to have up to date data.
      */
-    const Eigen::Ref<Eigen::Vector3d> get_base_attitude()
+    const Eigen::Ref<const Eigen::Vector3d> get_base_attitude()
     {
         return base_attitude_;
     }
@@ -189,7 +190,7 @@ public:
      * The method <acquire_sensors>"()" has to be called
      * prior to any getter to have up to date data.
      */
-    const Eigen::Ref<Eigen::Vector3d> get_base_linear_acceleration()
+    const Eigen::Ref<const Eigen::Vector3d> get_base_linear_acceleration()
     {
         return base_linear_acceleration_;
     }
@@ -201,7 +202,7 @@ public:
      * The method <acquire_sensors>"()" has to be called
      * prior to any getter to have up to date data.
      */
-    const Eigen::Ref<Eigen::Vector4d> get_base_attitude_quaternion()
+    const Eigen::Ref<const Eigen::Vector4d> get_base_attitude_quaternion()
     {
         return base_attitude_quaternion_;
     }
@@ -215,7 +216,8 @@ public:
      * @return This gives the status (enabled/disabled) of each motors using the
      * joint ordering convention.
      */
-    Eigen::Ref<const Eigen::Matrix<bool, BOLT_NB_MOTOR, 1> > get_motor_enabled()
+    const Eigen::Ref<const Eigen::Matrix<bool, BOLT_NB_MOTOR, 1> >
+    get_motor_enabled()
     {
         return motor_enabled_;
     }
@@ -225,7 +227,8 @@ public:
      * @return This gives the status (enabled/disabled) of each motors using the
      * joint ordering convention.
      */
-    Eigen::Ref<const Eigen::Matrix<bool, BOLT_NB_MOTOR, 1> > get_motor_ready()
+    const Eigen::Ref<const Eigen::Matrix<bool, BOLT_NB_MOTOR, 1> >
+    get_motor_ready()
     {
         return motor_ready_;
     }
@@ -235,7 +238,7 @@ public:
      * @return This gives the status (enabled/disabled of the onboard control
      * cards).
      */
-    Eigen::Ref<const Eigen::Matrix<bool, BOLT_NB_MOTOR_BOARD, 1> >
+    const Eigen::Ref<const Eigen::Matrix<bool, BOLT_NB_MOTOR_BOARD, 1> >
     get_motor_board_enabled()
     {
         return motor_board_enabled_;
@@ -246,7 +249,7 @@ public:
      * @return This gives the status (enabled/disabled of the onboard control
      * cards).
      */
-    Eigen::Ref<const Eigen::Matrix<int, BOLT_NB_MOTOR_BOARD, 1> >
+    const Eigen::Ref<const Eigen::Matrix<int, BOLT_NB_MOTOR_BOARD, 1> >
     get_motor_board_errors()
     {
         return motor_board_errors_;
@@ -270,7 +273,7 @@ public:
      *
      * @return Eigen::Ref<Eigen::Matrix<double, BOLT_NB_SLIDER, 1> >
      */
-    const Eigen::Ref<Eigen::Matrix<double, BOLT_NB_SLIDER, 1> >
+    const Eigen::Ref<const Eigen::Matrix<double, BOLT_NB_SLIDER, 1> >
     get_slider_positions()
     {
         return slider_positions_;
