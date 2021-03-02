@@ -65,7 +65,6 @@ int main(int argc, char** argv)
     real_time_tools::RealTimeThread thread;
 
     Bolt robot;
-
     robot.initialize(argv[1]);
 
     rt_printf("Controller is set up.\n");

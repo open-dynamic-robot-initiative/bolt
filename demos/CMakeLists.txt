@@ -26,7 +26,15 @@ macro(create_demo demo_name)
     ${demo_name}
     PUBLIC
       ODRI_CONTROL_INTERFACE_YAML_PATH="${odri_control_interface_yaml_path}")
-  # endif()
+
+  # Install demo
+  install(
+    TARGETS ${demo_name}
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES
+    DESTINATION include)
 
 endmacro(create_demo demo_name)
 

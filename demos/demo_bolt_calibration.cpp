@@ -54,7 +54,8 @@ int main(int argc, char** argv)
     std::shared_ptr<Bolt> robot = std::make_shared<Bolt>();
     robot->initialize(argv[1]);
 
-    ThreadCalibrationData_t thread_data(robot);
+    ThreadCalibrationData_t thread_data;
+    thread_data.robot = robot;
 
     rt_printf("Controller is set up.\n");
     rt_printf("Press enter to launch the calibration.\n");
