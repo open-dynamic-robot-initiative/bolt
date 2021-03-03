@@ -73,6 +73,9 @@ void Bolt::initialize(const std::string& network_id)
     robot_ = odri_control_interface::RobotFromYamlFile(
         network_id_, ODRI_CONTROL_INTERFACE_YAML_PATH);
 
+    calib_ctrl_ = odri_control_interface::JointCalibratorFromYamlFile(
+        ODRI_CONTROL_INTERFACE_YAML_PATH, robot_->joints);
+
     // Use a serial port to read slider values.
     serial_reader_ = std::make_shared<blmc_drivers::SerialReader>(
         "serial_port", BOLT_NB_SLIDER + 1);
