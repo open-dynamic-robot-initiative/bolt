@@ -1,4 +1,5 @@
-set(all_src_targets)
+set(all_lib_targets)
+set(all_exe_targets)
 
 #
 # Declare the project library.
@@ -25,7 +26,7 @@ target_compile_definitions(
   bolt
   PUBLIC ODRI_CONTROL_INTERFACE_YAML_PATH="${odri_control_interface_yaml_path}")
 # Export the target.
-list(APPEND all_src_targets bolt)
+list(APPEND all_lib_targets bolt)
 
 #
 # Hardware calibration program.
@@ -39,7 +40,7 @@ target_include_directories(
 # Link the dependencies.
 target_link_libraries(bolt_hardware_calibration bolt)
 # Export the target.
-list(APPEND all_src_targets bolt_hardware_calibration)
+list(APPEND all_exe_targets bolt_hardware_calibration)
 
 #
 # Optionally compile the dynamic_graph_manager Bolt wrapper.
@@ -57,7 +58,7 @@ if(${dynamic_graph_manager_FOUND})
   target_link_libraries(dgm_bolt ${PROJECT_NAME})
   target_link_libraries(dgm_bolt dynamic_graph_manager::dynamic_graph_manager)
   # Export the target.
-  list(APPEND all_src_targets dgm_bolt)
+  list(APPEND all_lib_targets dgm_bolt)
 
   #
   # Create the robot executable.
@@ -78,10 +79,9 @@ if(${dynamic_graph_manager_FOUND})
            "dgm_parameters_bolt.yaml")
   target_compile_definitions(
     dg_main_bolt
-    PUBLIC
-      DYNAMIC_GRAPH_MANAGER_YAML_PATH="${dynamic_graph_manager_yaml_file}")
+    PUBLIC DYNAMIC_GRAPH_MANAGER_YAML_PATH="${dynamic_graph_manager_yaml_file}")
   # Export.
-  list(APPEND all_src_targets dg_main_bolt)
+  list(APPEND all_exe_targets dg_main_bolt)
 
 endif(${dynamic_graph_manager_FOUND})
 
@@ -89,10 +89,25 @@ endif(${dynamic_graph_manager_FOUND})
 # Install and Export the libraries an programs.
 #
 install(
-  TARGETS ${all_src_targets}
-  EXPORT ${PROJECT_NAME}Targets
+  TARGETS ${all_lib_targets} ${all_exe_targets}
+  EXPORT export_${PROJECT_NAME}
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
-  RUNTIME DESTINATION bin
+  RUNTIME DESTINATION lib/${PROJECT_NAME}
   INCLUDES
   DESTINATION include)
+
+foreach(target ${all_exe_targets})
+  # install a symlink of the executable in lib/bolt
+  string(
+    CONCAT symlink_command
+           "execute_process("
+           "  COMMAND ${CMAKE_COMMAND} -E make_directory "
+           "  ${CMAKE_INSTALL_PREFIX}/bin/)\n"
+           "execute_process("
+           "  COMMAND ${CMAKE_COMMAND} -E create_symlink "
+           "  ${CMAKE_INSTALL_PREFIX}/lib/${PROJECT_NAME}/${target}"
+           "  ${CMAKE_INSTALL_PREFIX}/bin/${target} )"
+  )
+  install(CODE ${symlink_command})
+endforeach()

@@ -18,6 +18,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 find_package(pybind11 REQUIRED)
 
 # local dependencies.
+find_package(ament_cmake REQUIRED)
 find_package(mpi_cmake_modules REQUIRED)
 find_package(blmc_drivers REQUIRED)
 find_package(odri_control_interface REQUIRED)
@@ -27,6 +28,9 @@ find_package(PythonModules REQUIRED COMPONENTS robot_properties_bolt)
 
 # optional dependencies.
 find_package(dynamic_graph_manager QUIET)
+
+# prepare the final export
+ament_export_interfaces(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
 
 #
 # manage the creation of the libraries and executables
@@ -60,5 +64,7 @@ install(DIRECTORY include/ DESTINATION include)
 #
 add_documentation()
 
+#
 # Export this package as a cmake package.
-generate_cmake_package()
+#
+ament_package()
