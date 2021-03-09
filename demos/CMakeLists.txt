@@ -45,3 +45,5 @@ endmacro(create_demo demo_name)
 create_demo(bolt_demo_pd)
 
 create_demo(bolt_demo_calibration)
+
+create_demo(bolt_demo_sensor_reading)
