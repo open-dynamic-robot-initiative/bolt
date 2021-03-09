@@ -86,4 +86,39 @@ void print_vector(std::string v_name, const Eigen::Ref<const Eigen::VectorXd> v)
     rt_printf("]\n");
 }
 
+/**
+ * @brief Usefull tool for the demos and programs in order to print data in
+ * real time.
+ *
+ * @param v_name  is a string defining the data to print.
+ * @param v the vector to print.
+ */
+void print_vector_bool(std::string v_name, const Eigen::Ref<const Eigen::Matrix<bool, Eigen::Dynamic, 1> > v)
+{
+    v_name += ": [";
+    rt_printf("%s", v_name.c_str());
+    for (int i = 0; i < v.size(); ++i)
+    {
+        rt_printf("%s, ", v(i)? "True" : "False");
+    }
+    rt_printf("]\n");
+}
+
+/**
+ * @brief Usefull tool for the demos and programs in order to print data in
+ * real time.
+ *
+ * @param v_name  is a string defining the data to print.
+ * @param v the vector to print.
+ */
+void print_vector_int(std::string v_name, const Eigen::Ref<const Eigen::Matrix<int, Eigen::Dynamic, 1> > v)
+{
+    v_name += ": [";
+    rt_printf("%s", v_name.c_str());
+    for (int i = 0; i < v.size(); ++i)
+    {
+        rt_printf("%d, ", v(i));
+    }
+    rt_printf("]\n");
+}
 }  // namespace bolt
