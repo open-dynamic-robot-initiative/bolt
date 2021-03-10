@@ -84,6 +84,11 @@ void Bolt::initialize(const std::string& network_id)
     robot_->Init();
 }
 
+void Bolt::wait_until_ready()
+{
+    robot_->WaitUntilReady();
+}
+
 void Bolt::acquire_sensors()
 {
     // Acquire the data.

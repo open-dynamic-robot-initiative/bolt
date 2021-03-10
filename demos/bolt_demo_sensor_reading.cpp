@@ -20,6 +20,8 @@ static THREAD_FUNCTION_RETURN_TYPE control_loop(void* args)
     Eigen::Vector6d desired_torque = Eigen::Vector6d::Zero();
     rt_printf("Sensor reading loop started \n");
 
+    robot.wait_until_ready();
+
     size_t count = 0;
     while (!CTRL_C_DETECTED)
     {
