@@ -67,6 +67,11 @@ public:
     void acquire_sensors();
 
     /**
+     * @brief Wait until the hardware is ready to be controlled.
+     */
+    void wait_until_ready();
+
+    /**
      * @brief Fill attitude quaternion.
      */
     void fill_base_attitude_quaternion();

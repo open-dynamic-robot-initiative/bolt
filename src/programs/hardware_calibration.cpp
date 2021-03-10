@@ -30,6 +30,8 @@ static THREAD_FUNCTION_RETURN_TYPE control_loop(void* robot_void_ptr)
     Eigen::Vector6d joint_index_to_zero = Eigen::Vector6d::Zero();
     Eigen::Vector6d dummy_command = Eigen::Vector6d::Zero();
 
+    robot.wait_until_ready();
+
     robot.request_calibration(joint_index_to_zero);
 
     real_time_tools::Spinner spinner;

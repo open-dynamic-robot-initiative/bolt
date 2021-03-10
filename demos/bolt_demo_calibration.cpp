@@ -22,6 +22,8 @@ static THREAD_FUNCTION_RETURN_TYPE control_loop(void* thread_data_void_ptr)
 
     Bolt& robot = *thread_data_ptr->robot;
 
+    robot.wait_until_ready();
+
     // ask for calibration
     robot.request_calibration();
 

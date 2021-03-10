@@ -17,11 +17,11 @@
 // thread safe flag for application shutdown management
 #include <atomic>
 
-#include "yaml_utils/yaml_cpp_fwd.hpp"
-#include "real_time_tools/timer.hpp"
-#include "real_time_tools/spinner.hpp"
 #include "real_time_tools/iostream.hpp"
+#include "real_time_tools/spinner.hpp"
 #include "real_time_tools/thread.hpp"
+#include "real_time_tools/timer.hpp"
+#include "yaml_utils/yaml_cpp_fwd.hpp"
 
 namespace bolt
 {
@@ -93,13 +93,15 @@ void print_vector(std::string v_name, const Eigen::Ref<const Eigen::VectorXd> v)
  * @param v_name  is a string defining the data to print.
  * @param v the vector to print.
  */
-void print_vector_bool(std::string v_name, const Eigen::Ref<const Eigen::Matrix<bool, Eigen::Dynamic, 1> > v)
+void print_vector_bool(
+    std::string v_name,
+    const Eigen::Ref<const Eigen::Matrix<bool, Eigen::Dynamic, 1> > v)
 {
     v_name += ": [";
     rt_printf("%s", v_name.c_str());
     for (int i = 0; i < v.size(); ++i)
     {
-        rt_printf("%s, ", v(i)? "True" : "False");
+        rt_printf("%s, ", v(i) ? "True" : "False");
     }
     rt_printf("]\n");
 }
@@ -111,7 +113,9 @@ void print_vector_bool(std::string v_name, const Eigen::Ref<const Eigen::Matrix<
  * @param v_name  is a string defining the data to print.
  * @param v the vector to print.
  */
-void print_vector_int(std::string v_name, const Eigen::Ref<const Eigen::Matrix<int, Eigen::Dynamic, 1> > v)
+void print_vector_int(
+    std::string v_name,
+    const Eigen::Ref<const Eigen::Matrix<int, Eigen::Dynamic, 1> > v)
 {
     v_name += ": [";
     rt_printf("%s", v_name.c_str());
