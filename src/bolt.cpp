@@ -171,6 +171,7 @@ void Bolt::send_target_joint_torque(
             else
             {
                 control_state_ = BoltControlState::ready;
+                robot_->SendCommand();
             }
             break;
 
@@ -186,6 +187,7 @@ void Bolt::send_target_joint_torque(
             break;
 
         case BoltControlState::calibrate:
+            // calib_ctrl_ set the robot_->joints torque commands;
             if (calib_ctrl_->Run())
             {
                 control_state_ = BoltControlState::ready;

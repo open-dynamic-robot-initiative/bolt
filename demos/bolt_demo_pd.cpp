@@ -74,7 +74,6 @@ static THREAD_FUNCTION_RETURN_TYPE control_loop(void* args)
         ++count;
 
         // Send the current to the motor
-        // desired_torque.setZero();
         robot.send_target_joint_torque(desired_torque);
 
         real_time_tools::Timer::sleep_sec(0.001);
