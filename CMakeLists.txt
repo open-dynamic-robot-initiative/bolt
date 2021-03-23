@@ -15,11 +15,11 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # external dependencies.
+find_package(mpi_cmake_modules REQUIRED)
 find_package(pybind11 REQUIRED)
 
 # local dependencies.
 find_package(ament_cmake REQUIRED)
-find_package(mpi_cmake_modules REQUIRED)
 find_package(blmc_drivers REQUIRED)
 find_package(odri_control_interface REQUIRED)
 find_package(real_time_tools REQUIRED)
