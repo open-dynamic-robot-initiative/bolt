@@ -32,39 +32,43 @@ static THREAD_FUNCTION_RETURN_TYPE control_loop(void* args)
         if ((count % 1000) == 0)
         {
             rt_printf("\33[H\33[2J");  // clear screen
-            print_vector("des joint_tau  : ", desired_torque);
+            rt_printf("Sensory data:");
             rt_printf("\n");
-            print_vector("act joint_pos                  : ",
+            print_vector("des joint_tau                  ",
+                         desired_torque);
+            print_vector("act joint_pos                  ",
                          robot.get_joint_positions());
-            print_vector("act joint_vel                  : ",
+            print_vector("act joint_vel                  ",
                          robot.get_joint_velocities());
-            print_vector("act joint torq                 : ",
+            print_vector("act joint torq                 ",
                          robot.get_joint_target_torques());
-            print_vector("act joint target torq          : ",
+            print_vector("act joint target torq          ",
                          robot.get_joint_torques());
-            print_vector_bool("act status motor ready         : ",
+            print_vector_bool("act status motor ready         ",
                          robot.get_motor_ready());
-            print_vector_bool("act status motor enabled       : ",
+            print_vector_bool("act status motor enabled       ",
                          robot.get_motor_enabled());
-            print_vector_bool("act status motor board enabled : ",
+            print_vector_bool("act status motor board enabled ",
                          robot.get_motor_board_enabled());
-            print_vector_int("act status motor board errors  : ",
+            print_vector_int("act status motor board errors  ",
                          robot.get_motor_board_errors());
-            print_vector("act slider pos                 : ",
+            print_vector("act slider pos                 ",
                          robot.get_slider_positions());
-            print_vector("act imu quat                   : ",
+            print_vector("act imu quat                   ",
                          robot.get_base_attitude_quaternion());
-            print_vector("act imu rpy                    : ",
+            print_vector("act imu rpy                    ",
                          robot.get_base_attitude());
-            print_vector("act imu acc                    : ",
+            print_vector("act imu acc                    ",
                          robot.get_base_accelerometer());
-            print_vector("act imu gyroscope              : ",
+            print_vector("act imu gyroscope              ",
                          robot.get_base_gyroscope());
-            print_vector("act imu lin acc                : ",
+            print_vector("act imu lin acc                ",
                          robot.get_base_linear_acceleration());
             rt_printf("act e-stop                     : %s\n",
                       robot.get_active_estop() ? "true" : "false");
-
+            rt_printf("has error                      : %s\n",
+                      robot.has_error() ? "true" : "false");
+            rt_printf("\n");
             fflush(stdout);
         }
         ++count;

@@ -301,7 +301,7 @@ public:
      */
     bool is_calibrating()
     {
-        return is_calibrating_ || calibrate_request_;
+        return (control_state_ == BoltControlState::calibrate) || calibrate_request_;
     }
 
 private:
@@ -389,7 +389,9 @@ private:
     /** @brief Check if the user called for the joint calibration. */
     bool calibrate_request_;
 
-    bool is_calibrating_;
+    /** @brief Number of time we acquire the sensor readings, this is used
+     *  to prevent spamming prints */
+    long int nb_time_we_acquired_sensors_;
 
     /*
      * Drivers communication objects

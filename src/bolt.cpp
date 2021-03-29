@@ -61,7 +61,7 @@ Bolt::Bolt()
     // Finite state machine for the control
     control_state_ = BoltControlState::initial;
     calibrate_request_ = false;
-    is_calibrating_ = false;
+    nb_time_we_acquired_sensors_ = 0;
 }
 
 void Bolt::initialize(const std::string& network_id)
@@ -118,9 +118,13 @@ void Bolt::acquire_sensors()
     // acquire the slider positions
     if (serial_reader_->fill_vector(slider_box_data_) > 10)
     {
-        robot_->ReportError(
+        robot_->ReportError();
+        if(nb_time_we_acquired_sensors_ % 2000 == 0)
+        {
+            robot_->ReportError(
             "The slider box is not responding correctly, "
             "10 iteration are missing.");
+        }
     }
     for (unsigned i = 0; i < slider_positions_.size(); ++i)
     {
@@ -144,11 +148,16 @@ void Bolt::acquire_sensors()
     /*
      * Safety check
      */
-    if (base_attitude_(1) < 0.6 && base_attitude_(1) > -0.6 &&
-        (base_attitude_(0) < -2.5 || base_attitude_(0) > 2.5))
-    {
-        robot_->ReportError("Base attitude not in the defined parameter.");
-    }
+    // if (!(base_attitude_(1) < 0.6 && base_attitude_(1) > -0.6 &&
+    //     (base_attitude_(0) < -2.5 || base_attitude_(0) > 2.5)))
+    // {
+    //     robot_->ReportError();
+    //     if(nb_time_we_acquired_sensors_ % 2000 == 0)
+    //     {
+    //         robot_->ReportError("Base attitude not in the defined parameter.");
+    //     }
+    // }
+    ++nb_time_we_acquired_sensors_;
 }
 
 void Bolt::send_target_joint_torque(
@@ -180,7 +189,6 @@ void Bolt::send_target_joint_torque(
             {
                 calibrate_request_ = false;
                 control_state_ = BoltControlState::calibrate;
-                is_calibrating_ = true;
                 robot_->joints->SetZeroCommands();
             }
             robot_->SendCommand();
@@ -191,7 +199,6 @@ void Bolt::send_target_joint_torque(
             if (calib_ctrl_->Run())
             {
                 control_state_ = BoltControlState::ready;
-                is_calibrating_ = false;
             }
             robot_->SendCommand();
             break;
