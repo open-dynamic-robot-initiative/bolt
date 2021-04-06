@@ -79,7 +79,8 @@ if(${dynamic_graph_manager_FOUND})
            "dgm_parameters_bolt.yaml")
   target_compile_definitions(
     dg_main_bolt
-    PUBLIC DYNAMIC_GRAPH_MANAGER_YAML_PATH="${dynamic_graph_manager_yaml_file}")
+    PUBLIC DYNAMIC_GRAPH_MANAGER_YAML_PATH="${dynamic_graph_manager_yaml_file}"
+           ODRI_CONTROL_INTERFACE_YAML_PATH="${odri_control_interface_yaml_path}")
   # Export.
   list(APPEND all_exe_targets dg_main_bolt)
 
