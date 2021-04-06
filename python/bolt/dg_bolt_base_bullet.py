@@ -49,7 +49,7 @@ class DgBoltBaseRobot(Robot):
             self._use_fixed_base,
         )
 
-        self._bullet_env.add_robot_to_step(self._simulated_robot)
+        self._bullet_env.add_robot(self._simulated_robot)
 
         self.q0 = np.zeros(self._simulated_robot.pin_robot.nq)
 
