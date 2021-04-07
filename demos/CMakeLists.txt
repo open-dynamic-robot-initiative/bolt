@@ -36,6 +36,20 @@ macro(create_demo demo_name)
     INCLUDES
     DESTINATION include)
 
+  # Install a symlink of the executable in lib/bolt
+  string(
+    CONCAT symlink_command
+           "execute_process("
+           "  COMMAND ${CMAKE_COMMAND} -E make_directory "
+           "  ${CMAKE_INSTALL_PREFIX}/bin/)\n"
+           "execute_process("
+           "  COMMAND ${CMAKE_COMMAND} -E create_symlink "
+           "  ${CMAKE_INSTALL_PREFIX}/bin/${demo_name}"
+           "  ${CMAKE_INSTALL_PREFIX}/lib/${PROJECT_NAME}/${demo_name})"
+  )
+  install(CODE ${symlink_command})
+
+
 endmacro(create_demo demo_name)
 
 #

@@ -48,12 +48,18 @@ static THREAD_FUNCTION_RETURN_TYPE control_loop(void* robot_void_ptr)
     robot.send_target_joint_torque(dummy_command);
 
     rt_printf("Running calibration... Done.\n");
-    spinner.set_period(0.5);
+    int count = 0;
+    spinner.set_period(0.001);
     while (!CTRL_C_DETECTED)
     {
         robot.acquire_sensors();
-        print_vector("Joint Positions", robot.get_joint_positions());
+        if (count % 100 == 0){
+            print_vector("Joint Positions", -robot.get_joint_positions());
+        }
+        // re-send 0 torque command
+        robot.send_target_joint_torque(dummy_command);
         spinner.spin();
+        ++count;
     }
 
     return THREAD_FUNCTION_RETURN_VALUE;
