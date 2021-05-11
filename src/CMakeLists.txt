@@ -84,6 +84,54 @@ if(${dynamic_graph_manager_FOUND})
   # Export.
   list(APPEND all_exe_targets dg_main_bolt)
 
+  #
+  # Create the robot executable.
+  #
+  add_executable(dg programs/dg.cpp)
+  # Add the include dependencies.
+  target_include_directories(
+    dg
+    PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+           ${dynamic_graph_manager_INCLUDE_DIR} $<INSTALL_INTERFACE:include>)
+  # Link the dependencies.
+  target_link_libraries(dg dgm_bolt)
+  # YAML parameters.
+  string(
+    CONCAT dynamic_graph_manager_yaml_file
+           "${PythonModules_robot_properties_bolt_PATH}/"
+           "robot_properties_bolt/robot_properties_bolt/dynamic_graph_manager/"
+           "dgm_parameters_bolt.yaml")
+  target_compile_definitions(
+    dg
+    PUBLIC DYNAMIC_GRAPH_MANAGER_YAML_PATH="${dynamic_graph_manager_yaml_file}"
+           ODRI_CONTROL_INTERFACE_YAML_PATH="${odri_control_interface_yaml_path}")
+  # Export.
+  list(APPEND all_exe_targets dg)
+
+  #
+  # Create the robot executable.
+  #
+  add_executable(hw programs/hw.cpp)
+  # Add the include dependencies.
+  target_include_directories(
+    hw
+    PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+           ${dynamic_graph_manager_INCLUDE_DIR} $<INSTALL_INTERFACE:include>)
+  # Link the dependencies.
+  target_link_libraries(hw dgm_bolt)
+  # YAML parameters.
+  string(
+    CONCAT dynamic_graph_manager_yaml_file
+           "${PythonModules_robot_properties_bolt_PATH}/"
+           "robot_properties_bolt/robot_properties_bolt/dynamic_graph_manager/"
+           "dgm_parameters_bolt.yaml")
+  target_compile_definitions(
+    hw
+    PUBLIC DYNAMIC_GRAPH_MANAGER_YAML_PATH="${dynamic_graph_manager_yaml_file}"
+           ODRI_CONTROL_INTERFACE_YAML_PATH="${odri_control_interface_yaml_path}")
+  # Export.
+  list(APPEND all_exe_targets hw)
+
 endif(${dynamic_graph_manager_FOUND})
 
 #
