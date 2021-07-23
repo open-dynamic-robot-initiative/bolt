@@ -55,8 +55,6 @@ static THREAD_FUNCTION_RETURN_TYPE control_loop(void* args)
             print_vector("act slider pos                 ",
                          robot.get_slider_positions());
             print_vector("act imu quat                   ",
-                         robot.get_base_attitude_quaternion());
-            print_vector("act imu rpy                    ",
                          robot.get_base_attitude());
             print_vector("act imu acc                    ",
                          robot.get_base_accelerometer());

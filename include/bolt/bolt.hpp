@@ -183,7 +183,7 @@ public:
      * The method <acquire_sensors>"()" has to be called
      * prior to any getter to have up to date data.
      */
-    const Eigen::Ref<const Eigen::Vector3d> get_base_attitude()
+    const Eigen::Ref<const Eigen::Vector4d> get_base_attitude()
     {
         return base_attitude_;
     }
@@ -198,18 +198,6 @@ public:
     const Eigen::Ref<const Eigen::Vector3d> get_base_linear_acceleration()
     {
         return base_linear_acceleration_;
-    }
-
-    /**
-     * @brief get_base_accelerometer
-     * @return the base_accelerometer
-     * WARNING !!!!
-     * The method <acquire_sensors>"()" has to be called
-     * prior to any getter to have up to date data.
-     */
-    const Eigen::Ref<const Eigen::Vector4d> get_base_attitude_quaternion()
-    {
-        return base_attitude_quaternion_;
     }
 
     /**
@@ -358,13 +346,10 @@ private:
     Eigen::Vector3d base_gyroscope_;
 
     /** @brief base accelerometer. */
-    Eigen::Vector3d base_attitude_;
+    Eigen::Vector4d base_attitude_;
 
     /** @brief base accelerometer. */
     Eigen::Vector3d base_linear_acceleration_;
-
-    /** @brief base attitude quaternion. */
-    Eigen::Vector4d base_attitude_quaternion_;
 
     /** @brief Integers from the serial port.
      * - 4 sliders in [0, 1024]
