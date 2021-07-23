@@ -11,8 +11,8 @@
 
     <depend>mpi_cmake_modules</depend>
     <depend>pybind11</depend>
-    <depend>blmc_drivers</depend>
     <depend>odri_control_interface</depend>
+    <depend>slider_box</depend>
     <depend>real_time_tools</depend>
     <depend>yaml_utils</depend>
     <depend>PythonModules</depend>

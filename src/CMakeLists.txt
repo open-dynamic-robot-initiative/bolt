@@ -11,8 +11,8 @@ target_include_directories(
   bolt PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
               $<INSTALL_INTERFACE:include>)
 # Link the dependencies.
-target_link_libraries(bolt blmc_drivers::blmc_drivers)
 target_link_libraries(bolt odri_control_interface::odri_control_interface)
+target_link_libraries(bolt slider_box::slider_box)
 target_link_libraries(bolt real_time_tools::real_time_tools)
 target_link_libraries(bolt yaml_utils::yaml_utils)
 target_link_libraries(bolt Eigen3::Eigen)

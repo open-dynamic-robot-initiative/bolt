@@ -13,7 +13,7 @@
 
 #include <Eigen/Eigen>
 
-#include "blmc_drivers/serial_reader.hpp"
+#include "slider_box/serial_reader.hpp"
 #include "odri_control_interface/calibration.hpp"
 #include "odri_control_interface/robot.hpp"
 
@@ -409,7 +409,7 @@ private:
     /**
      * @brief Reader for serial port to read arduino slider values.
      */
-    std::shared_ptr<blmc_drivers::SerialReader> serial_reader_;
+    std::shared_ptr<slider_box::SerialReader> serial_reader_;
 };
 
 }  // namespace bolt
