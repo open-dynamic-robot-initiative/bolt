@@ -20,8 +20,8 @@ find_package(pybind11 REQUIRED)
 
 # local dependencies.
 find_package(ament_cmake REQUIRED)
-find_package(blmc_drivers REQUIRED)
 find_package(odri_control_interface REQUIRED)
+find_package(slider_box REQUIRED)
 find_package(real_time_tools REQUIRED)
 find_package(yaml_utils REQUIRED)
 find_package(PythonModules REQUIRED COMPONENTS robot_properties_bolt)
@@ -30,8 +30,8 @@ find_package(PythonModules REQUIRED COMPONENTS robot_properties_bolt)
 find_package(dynamic_graph_manager QUIET)
 
 # Export de dependencies.
-ament_export_dependencies(blmc_drivers odri_control_interface real_time_tools
-                          yaml_utils dynamic_graph_manager)
+ament_export_dependencies(odri_control_interface real_time_tools
+                          yaml_utils dynamic_graph_manager slider_box)
 
 # prepare the final export
 ament_export_interfaces(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
