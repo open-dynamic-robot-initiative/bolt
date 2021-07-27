@@ -56,7 +56,6 @@ Bolt::Bolt()
     base_gyroscope_.setZero();
     base_attitude_.setZero();
     base_linear_acceleration_.setZero();
-    base_attitude_quaternion_.setZero();
 
     // Finite state machine for the control
     control_state_ = BoltControlState::initial;
@@ -111,8 +110,7 @@ void Bolt::acquire_sensors()
      */
     base_accelerometer_ = robot_->imu->GetAccelerometer();
     base_gyroscope_ = robot_->imu->GetGyroscope();
-    base_attitude_ = robot_->imu->GetAttitudeEuler();
-    base_attitude_quaternion_ = robot_->imu->GetAttitudeQuaternion();
+    base_attitude_ = robot_->imu->GetAttitudeQuaternion();
     base_linear_acceleration_ = robot_->imu->GetLinearAcceleration();
 
     // acquire the slider positions
