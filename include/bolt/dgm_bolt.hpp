@@ -33,10 +33,14 @@ public:
     ~DGMBolt();
 
     /**
-     * @brief This function make also sure that the joint velocity do not exceed
+     * @brief is_in_safety_mode check if the dynamic graph is still alive and
+     * sending commands at a descent frequency. Inheriting this method is not
+     * mandatory but recommanded.
+     * This function make also sure that the joint velocity do not exceed
      * a certain value
+     * @return true if there is a problem.
      */
-    // bool is_in_safety_mode();
+     bool is_in_safety_mode();
 
     /**
      * @brief initialize_hardware_communication_process is the function that
@@ -79,10 +83,6 @@ public:
      * mandatory but recommanded.
      * @return true if there is a problem
      */
-    bool is_in_safety_mode()
-    {
-        return false;
-    }
 
 private:
     /**

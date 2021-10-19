@@ -29,4 +29,5 @@ int main(int, char*[])
     // Initialize and run it.
     dgm.initialize(param);
     dgm.run();
+//    dgm.run_single_process();
 }
