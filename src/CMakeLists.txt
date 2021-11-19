@@ -20,7 +20,7 @@ target_link_libraries(bolt Eigen3::Eigen)
 string(
   CONCAT odri_control_interface_yaml_path
          "${PythonModules_robot_properties_bolt_PATH}/"
-         "robot_properties_bolt/robot_properties_bolt/odri_control_interface/"
+         "robot_properties_bolt/resources/odri_control_interface/"
          "bolt_driver.yaml")
 target_compile_definitions(
   bolt
@@ -75,7 +75,7 @@ if(${dynamic_graph_manager_FOUND})
   string(
     CONCAT dynamic_graph_manager_yaml_file
            "${PythonModules_robot_properties_bolt_PATH}/"
-           "robot_properties_bolt/robot_properties_bolt/dynamic_graph_manager/"
+           "robot_properties_bolt/resources/dynamic_graph_manager/"
            "dgm_parameters_bolt.yaml")
   target_compile_definitions(
     dg_main_bolt
@@ -99,7 +99,7 @@ if(${dynamic_graph_manager_FOUND})
   string(
     CONCAT dynamic_graph_manager_yaml_file
            "${PythonModules_robot_properties_bolt_PATH}/"
-           "robot_properties_bolt/robot_properties_bolt/dynamic_graph_manager/"
+           "robot_properties_bolt/resources/dynamic_graph_manager/"
            "dgm_parameters_bolt.yaml")
   target_compile_definitions(
     dg
@@ -123,7 +123,7 @@ if(${dynamic_graph_manager_FOUND})
   string(
     CONCAT dynamic_graph_manager_yaml_file
            "${PythonModules_robot_properties_bolt_PATH}/"
-           "robot_properties_bolt/robot_properties_bolt/dynamic_graph_manager/"
+           "robot_properties_bolt/resources/dynamic_graph_manager/"
            "dgm_parameters_bolt.yaml")
   target_compile_definitions(
     hw
