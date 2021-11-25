@@ -87,7 +87,7 @@ if(${dynamic_graph_manager_FOUND})
   #
   # Create the robot executable.
   #
-  add_executable(dg programs/bolt_dg.cpp)
+  add_executable(bolt_dg programs/bolt_dg.cpp)
   # Add the include dependencies.
   target_include_directories(
     dg
@@ -111,7 +111,7 @@ if(${dynamic_graph_manager_FOUND})
   #
   # Create the robot executable.
   #
-  add_executable(hw programs/bolt_hw.cpp)
+  add_executable(bolt_hw programs/bolt_hw.cpp)
   # Add the include dependencies.
   target_include_directories(
     hw
