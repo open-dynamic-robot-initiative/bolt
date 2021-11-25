@@ -77,13 +77,6 @@ public:
         mim_msgs::srv::JointCalibration::Request::SharedPtr req,
         mim_msgs::srv::JointCalibration::Response::SharedPtr res);
 
-    /**
-     * @brief is_in_safety_mode check if the dynamic graph is still alive and
-     * sending commands at a descent frequency. Inheriting this method is not
-     * mandatory but recommanded.
-     * @return true if there is a problem
-     */
-
 private:
     /**
      * @brief Calibrate the robot joint position
