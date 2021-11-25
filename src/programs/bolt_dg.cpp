@@ -4,7 +4,7 @@
  * \author Maximilien Naveau
  * \date 2018
  *
- * DynamicGraphManager for bolt main executbale.
+ * DynamicGraphManager for bolt main executable.
  */
 
 #include <fstream>

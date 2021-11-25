@@ -87,14 +87,14 @@ if(${dynamic_graph_manager_FOUND})
   #
   # Create the robot executable.
   #
-  add_executable(dg programs/dg.cpp)
+  add_executable(dg programs/bolt_dg.cpp)
   # Add the include dependencies.
   target_include_directories(
     dg
     PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
            ${dynamic_graph_manager_INCLUDE_DIR} $<INSTALL_INTERFACE:include>)
   # Link the dependencies.
-  target_link_libraries(dg dgm_bolt)
+  target_link_libraries(bolt_dg dgm_bolt)
   # YAML parameters.
   string(
     CONCAT dynamic_graph_manager_yaml_file
@@ -111,14 +111,14 @@ if(${dynamic_graph_manager_FOUND})
   #
   # Create the robot executable.
   #
-  add_executable(hw programs/hw.cpp)
+  add_executable(hw programs/bolt_hw.cpp)
   # Add the include dependencies.
   target_include_directories(
     hw
     PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
            ${dynamic_graph_manager_INCLUDE_DIR} $<INSTALL_INTERFACE:include>)
   # Link the dependencies.
-  target_link_libraries(hw dgm_bolt)
+  target_link_libraries(bolt_hw dgm_bolt)
   # YAML parameters.
   string(
     CONCAT dynamic_graph_manager_yaml_file

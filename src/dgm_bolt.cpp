@@ -44,7 +44,6 @@ bool DGMBolt::is_in_safety_mode()
       }
       counter++;
     }
-    return false;
     return was_in_safety_mode_;
   }
 
