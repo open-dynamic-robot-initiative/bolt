@@ -90,7 +90,7 @@ if(${dynamic_graph_manager_FOUND})
   add_executable(bolt_dg programs/bolt_dg.cpp)
   # Add the include dependencies.
   target_include_directories(
-    dg
+    bolt_dg
     PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
            ${dynamic_graph_manager_INCLUDE_DIR} $<INSTALL_INTERFACE:include>)
   # Link the dependencies.
@@ -102,11 +102,11 @@ if(${dynamic_graph_manager_FOUND})
            "robot_properties_bolt/resources/dynamic_graph_manager/"
            "dgm_parameters_bolt.yaml")
   target_compile_definitions(
-    dg
+    bolt_dg
     PUBLIC DYNAMIC_GRAPH_MANAGER_YAML_PATH="${dynamic_graph_manager_yaml_file}"
            ODRI_CONTROL_INTERFACE_YAML_PATH="${odri_control_interface_yaml_path}")
   # Export.
-  list(APPEND all_exe_targets dg)
+  list(APPEND all_exe_targets bolt_dg)
 
   #
   # Create the robot executable.
@@ -114,7 +114,7 @@ if(${dynamic_graph_manager_FOUND})
   add_executable(bolt_hw programs/bolt_hw.cpp)
   # Add the include dependencies.
   target_include_directories(
-    hw
+          bolt_hw
     PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
            ${dynamic_graph_manager_INCLUDE_DIR} $<INSTALL_INTERFACE:include>)
   # Link the dependencies.
@@ -126,11 +126,11 @@ if(${dynamic_graph_manager_FOUND})
            "robot_properties_bolt/resources/dynamic_graph_manager/"
            "dgm_parameters_bolt.yaml")
   target_compile_definitions(
-    hw
+          bolt_hw
     PUBLIC DYNAMIC_GRAPH_MANAGER_YAML_PATH="${dynamic_graph_manager_yaml_file}"
            ODRI_CONTROL_INTERFACE_YAML_PATH="${odri_control_interface_yaml_path}")
   # Export.
-  list(APPEND all_exe_targets hw)
+  list(APPEND all_exe_targets bolt_hw)
 
 endif(${dynamic_graph_manager_FOUND})
 

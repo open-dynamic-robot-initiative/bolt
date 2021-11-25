@@ -65,9 +65,6 @@ add_subdirectory(srcpy)
 # Install includes.
 install(DIRECTORY include/ DESTINATION include)
 
-# Install launch files.
-install(DIRECTORY launch DESTINATION share/${PROJECT_NAME}/)
-
 # Install python files.
 get_python_install_dir(python_install_dir)
 install(
