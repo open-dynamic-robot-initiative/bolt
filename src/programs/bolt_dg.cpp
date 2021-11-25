@@ -12,6 +12,21 @@
 
 int main(int, char*[])
 {
+    sleep(2);
+    bool ready = false;
+    while(!ready)
+    {
+        try{
+            shared_memory::get("bolt", "ready", ready);
+        }catch(...)
+        {
+            ready = false;
+        }
+        sleep(0.5);
+        std::cout << "Wait for the shared memory to be ready." << std::endl;
+    }
+    std::cout << "Shared memory ready." << std::endl;
+
     // Get the dynamic_graph_manager config file.
     std::string yaml_path = DYNAMIC_GRAPH_MANAGER_YAML_PATH;
 
@@ -28,6 +43,10 @@ int main(int, char*[])
 
     // Initialize and run it.
     dgm.initialize(param);
-    dgm.run();
-//    dgm.run_single_process();
+
+    dgm.initialize_dynamic_graph_process();
+    dgm.run_dynamic_graph_process();
+    dynamic_graph_manager::ros_spin();
+    dynamic_graph_manager::ros_shutdown();
+    std::cout << "DG: End of the dynamic graph process." << std::endl;
 }

@@ -22,6 +22,32 @@ DGMBolt::~DGMBolt()
 {
 }
 
+bool DGMBolt::is_in_safety_mode()
+{
+    // Check if any card is in an error state.
+    if (bolt_.has_error()) {
+      was_in_safety_mode_ = true;
+      static int counter = 0;
+      if (counter % 2000 == 0) {
+        printf("DGMBolt: Going into safe mode as motor card reports error.\n");
+      }
+      counter += 1;
+    }
+
+    if (was_in_safety_mode_ || DynamicGraphManager::is_in_safety_mode())
+    {
+      static int counter = 0;
+      was_in_safety_mode_ = true;
+      if (counter % 2000 == 0)
+      {
+        printf("DGMBolt: is_in_safety_mode.\n");
+      }
+      counter++;
+    }
+    return was_in_safety_mode_;
+  }
+
+
 void DGMBolt::initialize_hardware_communication_process()
 {
     /**
