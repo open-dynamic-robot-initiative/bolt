@@ -4,6 +4,20 @@
 
 Drivers of the bolt robot.
 
+## Getting started:
+
+```
+cd $HOME
+mkdir devel
+cd devel
+git clone git@github.com:machines-in-motion/treep_machines_in_motion.git
+treep --clone BOLT
+```
+
+After these command you should have a workspace folder containing a src folder containing the bolt package and all it's dependencies.
+
+You cna use `colcon build` to compile all.
+
 ## Authors
 
 - Maximilien Naveau
@@ -19,7 +33,7 @@ Copyright(c) 2018-2019 Max Planck Gesellschaft, New York University
 
 BSD 3-Clause License
 
-## Test defective master_board
+## Max-Planck Institute: Test defective master_board
 
 - master board V1
   - SPI 0: ok
