@@ -11,6 +11,7 @@ dependance on pip packages
 ```
 python3 -m pip install numpy scipy empy pyyaml rospkg catkin_pkg matplotlib pybullet xacro m2r
 ```
+dependance on sources
 
 ```
 cd $HOME
