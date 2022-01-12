@@ -6,6 +6,12 @@ Drivers of the bolt robot.
 
 ## Getting started:
 
+dependance on pip packages 
+
+```
+python3 -m pip install numpy scipy empy pyyaml rospkg catkin_pkg matplotlib enum pybullet xacro m2r
+```
+
 ```
 cd $HOME
 mkdir devel
@@ -16,7 +22,7 @@ treep --clone BOLT
 
 After these command you should have a workspace folder containing a src folder containing the bolt package and all it's dependencies.
 
-You cna use `colcon build` to compile all.
+You can use `colcon build` to compile all.
 
 ## Authors
 
