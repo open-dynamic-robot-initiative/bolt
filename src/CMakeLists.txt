@@ -5,7 +5,7 @@ set(all_exe_targets)
 # Declare the project library.
 #
 
-add_library(bolt SHARED bolt.cpp)
+add_library(bolt SHARED bolt.cpp bolt_humanoid.cpp)
 # Add includes
 target_include_directories(
   bolt PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
@@ -25,6 +25,16 @@ string(
 target_compile_definitions(
   bolt
   PUBLIC ODRI_CONTROL_INTERFACE_YAML_PATH="${odri_control_interface_yaml_path}")
+
+string(
+  CONCAT odri_control_interface_humanoid_yaml_path
+          "${PythonModules_robot_properties_bolt_PATH}/"
+          "robot_properties_bolt/resources/odri_control_interface/"
+          "bolt_humanoid_driver.yaml")
+target_compile_definitions(
+  bolt
+  PUBLIC ODRI_CONTROL_INTERFACE_HUMANOID_YAML_PATH="${odri_control_interface_humanoid_yaml_path}")
+
 # Export the target.
 list(APPEND all_lib_targets bolt)
 
@@ -42,6 +52,17 @@ target_link_libraries(bolt_hardware_calibration bolt)
 # Export the target.
 list(APPEND all_exe_targets bolt_hardware_calibration)
 
+add_executable(bolt_humanoid_hardware_calibration programs/hardware_humanoid_calibration.cpp)
+# Add the include dependencies.
+target_include_directories(
+  bolt_humanoid_hardware_calibration
+  PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+         $<INSTALL_INTERFACE:include>)
+# Link the dependencies.
+target_link_libraries(bolt_humanoid_hardware_calibration bolt)
+# Export the target.
+list(APPEND all_exe_targets bolt_humanoid_hardware_calibration)
+
 #
 # Optionally compile the dynamic_graph_manager Bolt wrapper.
 #
@@ -49,13 +70,13 @@ if(${dynamic_graph_manager_FOUND})
   #
   # create library
   #
-  add_library(dgm_bolt SHARED dgm_bolt.cpp)
+  add_library(dgm_bolt SHARED dgm_bolt.cpp dgm_bold_humanoid.cpp)
   # Add the include dependencies.
   target_include_directories(
     dgm_bolt PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
                     $<INSTALL_INTERFACE:include>)
   # Link the dependencies.
-  target_link_libraries(dgm_bolt ${PROJECT_NAME})
+  target_link_libraries(dgm_bolt bolt)
   target_link_libraries(dgm_bolt dynamic_graph_manager::dynamic_graph_manager)
   # Export the target.
   list(APPEND all_lib_targets dgm_bolt)
@@ -83,6 +104,30 @@ if(${dynamic_graph_manager_FOUND})
            ODRI_CONTROL_INTERFACE_YAML_PATH="${odri_control_interface_yaml_path}")
   # Export.
   list(APPEND all_exe_targets dg_main_bolt)
+
+  #
+  # Create the robot executable.
+  #
+  add_executable(dg_main_bolt programs/dg_main_bolt_humanoid.cpp)
+  # Add the include dependencies.
+  target_include_directories(
+    dg_main_bolt_humanoid
+    PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+           ${dynamic_graph_manager_INCLUDE_DIR} $<INSTALL_INTERFACE:include>)
+  # Link the dependencies.
+  target_link_libraries(dg_main_bolt_humanoid dgm_bolt)
+  # YAML parameters.
+  string(
+    CONCAT dynamic_graph_manager_humanoid_yaml_file
+           "${PythonModules_robot_properties_bolt_PATH}/"
+           "robot_properties_bolt/resources/dynamic_graph_manager/"
+           "dgm_parameters_bolt_humanoid.yaml")
+  target_compile_definitions(
+    dg_main_bolt_humanoid
+    PUBLIC DYNAMIC_GRAPH_MANAGER_HUMANOID_YAML_PATH="${dynamic_graph_manager_humanoid_yaml_file}"
+           ODRI_CONTROL_INTERFACE_HUMANOID_YAML_PATH="${odri_control_interface_yaml_path}")
+  # Export.
+  list(APPEND all_exe_targets dg_main_bolt_humanoid)
 
   #
   # Create the robot executable.
