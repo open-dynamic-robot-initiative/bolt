@@ -70,7 +70,7 @@ if(${dynamic_graph_manager_FOUND})
   #
   # create library
   #
-  add_library(dgm_bolt SHARED dgm_bolt.cpp dgm_bold_humanoid.cpp)
+  add_library(dgm_bolt SHARED dgm_bolt.cpp dgm_bolt_humanoid.cpp)
   # Add the include dependencies.
   target_include_directories(
     dgm_bolt PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
@@ -108,7 +108,7 @@ if(${dynamic_graph_manager_FOUND})
   #
   # Create the robot executable.
   #
-  add_executable(dg_main_bolt programs/dg_main_bolt_humanoid.cpp)
+  add_executable(dg_main_bolt_humanoid programs/dg_main_bolt_humanoid.cpp)
   # Add the include dependencies.
   target_include_directories(
     dg_main_bolt_humanoid
@@ -125,7 +125,7 @@ if(${dynamic_graph_manager_FOUND})
   target_compile_definitions(
     dg_main_bolt_humanoid
     PUBLIC DYNAMIC_GRAPH_MANAGER_HUMANOID_YAML_PATH="${dynamic_graph_manager_humanoid_yaml_file}"
-           ODRI_CONTROL_INTERFACE_HUMANOID_YAML_PATH="${odri_control_interface_yaml_path}")
+           ODRI_CONTROL_INTERFACE_HUMANOID_YAML_PATH="${odri_control_interface_humanoid_yaml_path}")
   # Export.
   list(APPEND all_exe_targets dg_main_bolt_humanoid)
 
