@@ -145,18 +145,18 @@ void DGMBoltHumanoid::set_motor_controls_from_map(
     }
 }
 
-void DGMBolt::calibrate_joint_position_callback(
+void DGMBoltHumanoid::calibrate_joint_position_callback(
     mim_msgs::srv::JointCalibration::Request::SharedPtr,
     mim_msgs::srv::JointCalibration::Response::SharedPtr res)
 {
     // parse and register the command for further call.
-    add_user_command(std::bind(&DGMBolt::calibrate_joint_position, this));
+    add_user_command(std::bind(&DGMBoltHumanoid::calibrate_joint_position, this));
 
     // return whatever the user want
     res->sanity_check = true;
 }
 
-void DGMBolt::calibrate_joint_position()
+void DGMBoltHumanoid::calibrate_joint_position()
 {
     bolt_.request_calibration();
 }
