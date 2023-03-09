@@ -83,6 +83,11 @@ void BoltHumanoid::initialize(const std::string& network_id)
     robot_->Init();
 }
 
+void BoltHumanoid::set_max_current(const double& max_current)
+{
+    robot_->joints->SetMaximumCurrents(max_current);
+}
+
 void BoltHumanoid::wait_until_ready()
 {
     robot_->WaitUntilReady();

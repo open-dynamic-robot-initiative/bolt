@@ -55,6 +55,11 @@ public:
     void initialize(const std::string& network_id);
 
     /**
+     * @brief Sets the maximum motor currents.
+     */
+    void set_max_current(const double& max_current);
+
+    /**
      * @brief send_target_torques sends the target currents to the motors
      */
     void send_target_joint_torque(
