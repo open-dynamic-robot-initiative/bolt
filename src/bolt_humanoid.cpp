@@ -49,7 +49,8 @@ BoltHumanoid::BoltHumanoid()
     // Slider bos infos.
     slider_positions_.setZero();
     active_estop_ = true;  // By default assume the estop is active.
-    slider_box_data_.resize(BOLT_HUMANOID_NB_SLIDER + 1, 0);  // 4 sliders + 1 e-stop.
+    slider_box_data_.resize(BOLT_HUMANOID_NB_SLIDER + 1,
+                            0);  // 4 sliders + 1 e-stop.
 
     // imu infos
     base_accelerometer_.setZero();
@@ -127,11 +128,11 @@ void BoltHumanoid::acquire_sensors()
     if (serial_reader_->fill_vector(slider_box_data_) > 10)
     {
         robot_->ReportError();
-        if(nb_time_we_acquired_sensors_ % 2000 == 0)
+        if (nb_time_we_acquired_sensors_ % 2000 == 0)
         {
             robot_->ReportError(
-            "The slider box is not responding correctly, "
-            "10 iteration are missing.");
+                "The slider box is not responding correctly, "
+                "10 iteration are missing.");
         }
     }
     for (unsigned i = 0; i < slider_positions_.size(); ++i)
@@ -162,7 +163,8 @@ void BoltHumanoid::acquire_sensors()
     //     robot_->ReportError();
     //     if(nb_time_we_acquired_sensors_ % 2000 == 0)
     //     {
-    //         robot_->ReportError("Base attitude not in the defined parameter.");
+    //         robot_->ReportError("Base attitude not in the defined
+    //         parameter.");
     //     }
     // }
     ++nb_time_we_acquired_sensors_;
@@ -211,6 +213,30 @@ void BoltHumanoid::send_target_joint_torque(
             robot_->SendCommand();
             break;
     }
+}
+
+void BoltHumanoid::send_target_joint_position(
+    const Eigen::Ref<Eigen::Vector9d> target_joint_position)
+{
+    robot_->joints->SetDesiredPositions(target_joint_position);
+}
+
+void BoltHumanoid::send_target_joint_velocity(
+    const Eigen::Ref<Eigen::Vector9d> target_joint_velocity)
+{
+    robot_->joints->SetDesiredVelocities(target_joint_velocity);
+}
+
+void BoltHumanoid::send_target_joint_position_gains(
+    const Eigen::Ref<Eigen::Vector9d> target_joint_position_gains)
+{
+    robot_->joints->SetPositionGains(target_joint_position_gains);
+}
+
+void BoltHumanoid::send_target_joint_velocity_gains(
+    const Eigen::Ref<Eigen::Vector9d> target_joint_velocity_gains)
+{
+    robot_->joints->SetVelocityGains(target_joint_velocity_gains);
 }
 
 void BoltHumanoid::request_calibration(
