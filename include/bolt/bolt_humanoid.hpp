@@ -72,6 +72,11 @@ public:
     void wait_until_ready();
 
     /**
+     * @brief Check if the robot is ready.
+     */
+    bool is_ready();
+
+    /**
      * @brief Fill attitude quaternion.
      */
     void fill_base_attitude_quaternion();

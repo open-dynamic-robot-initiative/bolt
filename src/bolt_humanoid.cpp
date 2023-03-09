@@ -88,6 +88,11 @@ void BoltHumanoid::wait_until_ready()
     robot_->WaitUntilReady();
 }
 
+bool BoltHumanoid::is_ready()
+{
+    return robot_->IsReady();
+}
+
 void BoltHumanoid::acquire_sensors()
 {
     // Acquire the data.
