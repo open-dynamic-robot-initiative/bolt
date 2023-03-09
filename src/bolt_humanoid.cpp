@@ -49,8 +49,9 @@ BoltHumanoid::BoltHumanoid()
     // Slider bos infos.
     slider_positions_.setZero();
     active_estop_ = true;  // By default assume the estop is active.
-    slider_box_data_.resize(BOLT_HUMANOID_NB_SLIDER + 1,
-                            0);  // 4 sliders + 1 e-stop.
+
+    // 4 sliders + 1 e-stop.
+    slider_box_data_.resize(BOLT_HUMANOID_NB_SLIDER + 1, 0);
 
     // imu infos
     base_accelerometer_.setZero();
@@ -64,7 +65,8 @@ BoltHumanoid::BoltHumanoid()
     nb_time_we_acquired_sensors_ = 0;
 }
 
-void BoltHumanoid::initialize(const std::string& network_id)
+void BoltHumanoid::initialize(const std::string& network_id,
+                              const std::string& slider_box_port)
 {
     // Network info.
     network_id_ = network_id;
@@ -77,8 +79,18 @@ void BoltHumanoid::initialize(const std::string& network_id)
         ODRI_CONTROL_INTERFACE_HUMANOID_YAML_PATH, robot_->joints);
 
     // Use a serial port to read slider values.
-    serial_reader_ = std::make_shared<slider_box::SerialReader>(
-        "serial_port", BOLT_HUMANOID_NB_SLIDER + 1);
+    // only initialize serial reader if
+    if (!slider_box_port.empty() and slider_box_port != SLIDER_BOX_DISABLED)
+    {
+        // Use a serial port to read slider values.
+        serial_reader_ = std::make_shared<slider_box::SerialReader>(
+            slider_box_port, BOLT_HUMANOID_NB_SLIDER + 1);
+    }
+    else
+    {
+        // if no slider box is used, disable estop
+        active_estop_ = false;
+    }
 
     // Initialize the robot.
     robot_->Init();
@@ -124,24 +136,27 @@ void BoltHumanoid::acquire_sensors()
     base_attitude_ = robot_->imu->GetAttitudeQuaternion();
     base_linear_acceleration_ = robot_->imu->GetLinearAcceleration();
 
-    // acquire the slider positions
-    if (serial_reader_->fill_vector(slider_box_data_) > 10)
+    if (serial_reader_)
     {
-        robot_->ReportError();
-        if (nb_time_we_acquired_sensors_ % 2000 == 0)
+        // acquire the slider positions
+        if (serial_reader_->fill_vector(slider_box_data_) > 10)
         {
-            robot_->ReportError(
-                "The slider box is not responding correctly, "
-                "10 iteration are missing.");
+            robot_->ReportError();
+            if (nb_time_we_acquired_sensors_ % 2000 == 0)
+            {
+                robot_->ReportError(
+                    "The slider box is not responding correctly, "
+                    "10 iteration are missing.");
+            }
         }
+        for (unsigned i = 0; i < slider_positions_.size(); ++i)
+        {
+            // acquire the slider
+            slider_positions_(i) = double(slider_box_data_[i + 1]) / 1024.;
+        }
+        // acquire the e-stop from the slider box
+        active_estop_ = slider_box_data_[0] == 0;
     }
-    for (unsigned i = 0; i < slider_positions_.size(); ++i)
-    {
-        // acquire the slider
-        slider_positions_(i) = double(slider_box_data_[i + 1]) / 1024.;
-    }
-    // acquire the e-stop from the slider box
-    active_estop_ = slider_box_data_[0] == 0;
 
     /**
      * The different status.

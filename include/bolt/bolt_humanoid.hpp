@@ -43,6 +43,9 @@ enum BoltControlState
 class BoltHumanoid
 {
 public:
+    //! @brief Set slider box port to this value to disable it.
+    inline static const std::string SLIDER_BOX_DISABLED = "none";
+
     /**
      * @brief Bolt is the constructor of the class.
      */
@@ -51,8 +54,15 @@ public:
     /**
      * @brief initialize the robot by setting aligning the motors and calibrate
      * the sensors to 0
+     *
+     * @param network_id Name of the network interface for connection to the
+     *      robot.
+     * @param slider_box_port Name of the serial port to which the slider box is
+     *      connected.  Set to "" or "none" if no slider box is used.  Set to
+     *      "auto" to auto-detect the port.
      */
-    void initialize(const std::string& network_id);
+    void initialize(const std::string& network_id,
+                    const std::string& slider_box_port = SLIDER_BOX_DISABLED);
 
     /**
      * @brief Sets the maximum motor currents.
