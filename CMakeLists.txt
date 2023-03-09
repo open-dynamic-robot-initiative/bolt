@@ -29,9 +29,16 @@ find_package(PythonModules REQUIRED COMPONENTS robot_properties_bolt)
 # optional dependencies.
 find_package(dynamic_graph_manager QUIET)
 
-# Export de dependencies.
-ament_export_dependencies(odri_control_interface real_time_tools
-                          yaml_utils dynamic_graph_manager slider_box)
+# Export dependencies.
+ament_export_dependencies(
+  odri_control_interface
+  real_time_tools
+  yaml_utils
+  slider_box
+)
+if(${dynamic_graph_manager_FOUND})
+  ament_export_dependencies(dynamic_graph_manager)
+endif()
 
 # prepare the final export
 ament_export_interfaces(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
