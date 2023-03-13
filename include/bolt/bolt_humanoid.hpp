@@ -13,9 +13,9 @@
 
 #include <Eigen/Eigen>
 
-#include "slider_box/serial_reader.hpp"
 #include "odri_control_interface/calibration.hpp"
 #include "odri_control_interface/robot.hpp"
+#include "slider_box/serial_reader.hpp"
 
 namespace Eigen
 {
@@ -43,6 +43,9 @@ enum BoltControlState
 class BoltHumanoid
 {
 public:
+    //! @brief Set slider box port to this value to disable it.
+    inline static const std::string SLIDER_BOX_DISABLED = "none";
+
     /**
      * @brief Bolt is the constructor of the class.
      */
@@ -51,14 +54,54 @@ public:
     /**
      * @brief initialize the robot by setting aligning the motors and calibrate
      * the sensors to 0
+     *
+     * @param network_id Name of the network interface for connection to the
+     *      robot.
+     * @param slider_box_port Name of the serial port to which the slider box is
+     *      connected.  Set to "" or "none" if no slider box is used.  Set to
+     *      "auto" to auto-detect the port.
      */
-    void initialize(const std::string& network_id);
+    void initialize(const std::string& network_id,
+                    const std::string& slider_box_port = SLIDER_BOX_DISABLED);
+
+    /**
+     * @brief Sets the maximum motor currents.
+     */
+    void set_max_current(const double& max_current);
 
     /**
      * @brief send_target_torques sends the target currents to the motors
      */
     void send_target_joint_torque(
         const Eigen::Ref<const Eigen::Vector9d> target_joint_torque);
+
+    /**
+     * @brief Sets the desired joint position of the P controller running on
+     * the card.
+     */
+    void send_target_joint_position(
+        const Eigen::Ref<Eigen::Vector9d> target_joint_position);
+
+    /**
+     * @brief Sets the desired joint velocity of the D controller running on
+     * the card.
+     */
+    void send_target_joint_velocity(
+        const Eigen::Ref<Eigen::Vector9d> target_joint_velocity);
+
+    /**
+     * @brief Sets the desired joint position gain P for the P controller
+     * running on the card.
+     */
+    void send_target_joint_position_gains(
+        const Eigen::Ref<Eigen::Vector9d> target_joint_position_gains);
+
+    /**
+     * @brief Sets the desired joint velocity gain D for the D controller
+     * running on the card.
+     */
+    void send_target_joint_velocity_gains(
+        const Eigen::Ref<Eigen::Vector9d> target_joint_velocity_gains);
 
     /**
      * @brief acquire_sensors acquire all available sensors, WARNING !!!!
@@ -70,6 +113,11 @@ public:
      * @brief Wait until the hardware is ready to be controlled.
      */
     void wait_until_ready();
+
+    /**
+     * @brief Check if the robot is ready.
+     */
+    bool is_ready();
 
     /**
      * @brief Fill attitude quaternion.
@@ -231,7 +279,8 @@ public:
      * @return This gives the status (enabled/disabled of the onboard control
      * cards).
      */
-    const Eigen::Ref<const Eigen::Matrix<bool, BOLT_HUMANOID_NB_MOTOR_BOARD, 1> >
+    const Eigen::Ref<
+        const Eigen::Matrix<bool, BOLT_HUMANOID_NB_MOTOR_BOARD, 1> >
     get_motor_board_enabled()
     {
         return motor_board_enabled_;
@@ -289,7 +338,8 @@ public:
      */
     bool is_calibrating()
     {
-        return (control_state_ == BoltControlState::calibrate) || calibrate_request_;
+        return (control_state_ == BoltControlState::calibrate) ||
+               calibrate_request_;
     }
 
 private:
