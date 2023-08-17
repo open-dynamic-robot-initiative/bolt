@@ -108,7 +108,7 @@ void BoltHumanoid::wait_until_ready()
 
 bool BoltHumanoid::is_ready()
 {
-    return robot_->IsReady();
+    return control_state_ == BoltControlState::ready;
 }
 
 void BoltHumanoid::acquire_sensors()
